@@ -53,8 +53,11 @@ jobs:
           # flux reads ~/.docker/config.json; it has no login of its own.
           echo "$GITHUB_TOKEN" | docker login ghcr.io \
             --username "$GITHUB_ACTOR" --password-stdin
+          # flux ignores *.png, *.jpg, *.zip and more by default; the
+          # kustomization lists PNG icons, so only VCS metadata is ignored.
           flux push artifact "${ARTIFACT}:${version}" \
             --path ./web \
+            --ignore-paths '.git/' \
             --source "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" \
             --revision "${GITHUB_REF_NAME}@sha1:${GITHUB_SHA}"
           echo "published ${ARTIFACT}:${version}"
