@@ -1,0 +1,21 @@
+# Mounts when a Hugo site imports this repository as a module
+# (github.com/soundadam/design). Paths match what soundadam.com serves:
+# stylesheets as resources under design/, fonts under /fonts/, marks under
+# /img/logo/, icons at the site root.
+[module]
+  [[module.mounts]]
+    source = "web"
+    target = "assets/design"
+    includeFiles = ["*.css"]
+  [[module.mounts]]
+    source = "web"
+    target = "static/fonts"
+    includeFiles = ["*.woff2", "OFL-*.txt"]
+  [[module.mounts]]
+    source = "web"
+    target = "assets/img/logo"
+    includeFiles = ["waveform*.svg", "mark*.svg"]
+  [[module.mounts]]
+    source = "web"
+    target = "static"
+    includeFiles = ["favicon.*", "apple-touch-icon.png", "icon-192.png"]

@@ -1,0 +1,60 @@
+name: Release
+
+# A tag vX.Y.Z publishes web/ as oci://ghcr.io/soundadam/design:X.Y.Z.
+# The cluster follows 1.x (soundadam/platform-gitops, Flux OCIRepository
+# `design`), so a minor or patch tag reaches production with no change
+# there. Hugo sites take the same tag through their go.mod.
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+env:
+  # Matches mainland_flux_version in platform-gitops.
+  FLUX_VERSION: 2.9.4
+  FLUX_SHA256: c2c397a52930f52d2005c01d276116b059d062de379386d58e98115380a766a2
+  ARTIFACT: oci://ghcr.io/soundadam/design
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
+        with:
+          go-version-file: go.mod
+
+      - name: Gate
+        run: make check
+
+      - name: Install the pinned flux CLI
+        run: |
+          set -eux
+          url="https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz"
+          curl -fsSL "$url" -o /tmp/flux.tar.gz
+          echo "${FLUX_SHA256}  /tmp/flux.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/flux.tar.gz -C /tmp flux
+          sudo install -m 0755 /tmp/flux /usr/local/bin/flux
+
+      - name: Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eux
+          version="${GITHUB_REF_NAME#v}"
+          echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'
+          # flux reads ~/.docker/config.json; it has no login of its own.
+          echo "$GITHUB_TOKEN" | docker login ghcr.io \
+            --username "$GITHUB_ACTOR" --password-stdin
+          flux push artifact "${ARTIFACT}:${version}" \
+            --path ./web \
+            --source "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" \
+            --revision "${GITHUB_REF_NAME}@sha1:${GITHUB_SHA}"
+          echo "published ${ARTIFACT}:${version}"

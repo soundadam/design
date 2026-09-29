@@ -1,0 +1,18 @@
+/* 字体文件与这个样式表放在同一目录，url() 相对本文件解析。
+ * 许可证：OFL-Manrope.txt、OFL-FiraCode.txt。 */
+
+@font-face {
+	font-family: Manrope;
+	font-style: normal;
+	font-weight: 200 800;
+	font-display: swap;
+	src: url("manrope-variable.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Fira Code";
+	font-style: normal;
+	font-weight: 300 700;
+	font-display: swap;
+	src: url("fira-code-variable.woff2") format("woff2");
+}

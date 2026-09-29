@@ -1,0 +1,197 @@
+/* soundadam 设计 token：颜色、间距、字号、圆角、阴影的唯一出处。
+ *
+ * 亮色写在 :root。暗色是按页面选择的：<html data-theme="auto"> 的页面在
+ * 系统暗色时换用下面 @media 块里的值，没写这个属性的页面始终是亮色——
+ * 一个页面在暗色下没过视觉检查，就不该被系统设置翻成暗色。
+ *
+ * 页面强调色是品红（CTA 与链接），logo 保持自己的蓝色渐变，两者互不跟随。
+ * 改这里的值等于改所有使用方的视觉，见 .claude/rules/tokens.md。
+ */
+
+:root {
+	color-scheme: light;
+
+	/* --- 页面强调色阶：以 CTA 品红为主色 --- */
+	--color-brand-800: #86165c; /* 正文链接 */
+	--color-brand-700: #c53490; /* CTA hover */
+	--color-brand-600: #d62293; /* CTA 主色 */
+	--color-brand-500: #df59ad;
+	--color-brand-400: #e78ac6;
+	--color-brand-100: #f6d3e9;
+	--color-brand-050: #fdf3f9;
+
+	--gradient-brand: linear-gradient(90deg, var(--color-brand-600) 0%, var(--color-brand-500) 55%, var(--color-brand-400) 100%);
+
+	/* --- 语义色 --- */
+	--color-base: #ffffff;
+	--color-contrast: #111111;
+	--color-cta: var(--color-brand-600);
+	--color-cta-hover: var(--color-brand-700);
+	--color-on-cta: #ffffff; /* CTA 底色上的文字，两种模式都是白 */
+	--color-paper: #ffffff; /* 必须是浅底的内容（二维码），暗色下也不换 */
+	--color-link: var(--color-brand-800);
+	--color-link-hover: var(--color-brand-600);
+	--color-accent-surface: var(--color-brand-050);
+	--color-accent-border: var(--color-brand-100);
+	--color-accent-soft: var(--color-brand-400);
+	--color-accent-marker: var(--color-brand-500);
+
+	/* --- 中性灰阶 --- */
+	--color-gray-050: #fdfdfd;
+	--color-gray-100: #f8f8f8;
+	--color-gray-300: #eaeaea;
+	--color-gray-400: #d0d0d0;
+	--color-gray-500: #666666;
+	--color-gray-700: #626262;
+
+	/* --- 界面层次：控制台这类「页面底 + 卡片」的布局用这组 --- */
+	--color-canvas: var(--color-gray-100); /* 页面底 */
+	--color-surface: var(--color-base); /* 卡片 */
+	--color-surface-muted: var(--color-gray-100); /* 卡片里的数据块、代码、输入框 */
+	--color-border: var(--color-gray-300);
+	--color-muted: var(--color-gray-500); /* 次要文字 */
+
+	/* --- 状态色：文字色与它的浅底成对使用 --- */
+	--color-ok: #15803d;
+	--color-ok-surface: #dcfce7;
+	--color-warn: #a14a07;
+	--color-warn-surface: #fef3c7;
+	--color-bad: #b42318;
+	--color-bad-surface: #fee4e2;
+
+	/* 导航栏目色，同时供移动端抽屉使用。 */
+	--color-slot-about: #dd9ef4;
+	--color-slot-projects: #f29996;
+	--color-slot-blog: #f6e2af;
+
+	/* --- 间距阶 --- */
+	--space-10: 6px;
+	--space-20: 10px;
+	--space-30: 20px;
+	--space-40: 30px;
+	--space-50: clamp(30px, 5vw, 50px);
+	--space-60: clamp(40px, 7vw, 72px);
+	--space-70: clamp(56px, 9vw, 104px); /* 栏目段落之间的呼吸 */
+
+	/* --- 排版 ---
+	 * Manrope 不含汉字，中文页会回落到系统字体。显式写出 CJK 栈，免得
+	 * macOS 拿到苹方、Windows 拿到宋体，两边字重完全不一样。 */
+	--font-sans: Manrope, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+		"PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC",
+		"Microsoft YaHei", sans-serif;
+	--font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--font-editorial: Georgia, "Noto Serif CJK SC", "Songti SC", STSong, serif;
+
+	/* 字号阶。一个页面上同时出现的字号不超过四级，别再往里加。 */
+	--text-2xs: 0.75rem; /* 12 —— 版权行、面板 kicker */
+	--text-xs: 0.875rem; /* 14 —— 图注、日期 */
+	--text-sm: 0.9375rem; /* 15 —— 页脚链接、次要说明 */
+	--text-base: 1.0625rem; /* 17 —— 正文 */
+	--text-md: 1.1875rem; /* 19 —— 卡片标题、导航 */
+	--text-lg: 1.375rem; /* 22 —— 引导句 */
+
+	/* 标题阶。四级各自有独立区间，hero 与栏目标题不会撞成同一个字号。 */
+	--text-h1: clamp(2.5rem, 1.2rem + 5vw, 5.5rem); /* 40 → 88 */
+	--text-h2: clamp(1.875rem, 1.4rem + 2vw, 2.75rem); /* 30 → 44 */
+	--text-h3: clamp(1.375rem, 1.15rem + 0.9vw, 1.75rem); /* 22 → 28 */
+	--text-h4: 1.1875rem; /* 19 */
+
+	/* 刊物式首页：大字与细线。 */
+	--text-display: clamp(3.3rem, 0.6rem + 8.2vw, 7.75rem);
+	--text-display-zh: clamp(2.9rem, 0.8rem + 7vw, 6.5rem);
+	--text-project: clamp(2rem, 1.1rem + 2.5vw, 3.4rem);
+	--leading-display: 1.02;
+	--tracking-display: -0.055em;
+
+	--leading-tight: 1.1;
+	--leading-snug: 1.3;
+	--leading-normal: 1.65;
+	--tracking-tight: -0.02em;
+	--tracking-wide: 0.16em;
+
+	/* 代码高亮的语义色。 */
+	--color-code-string: #0a7d6b;
+	--color-code-number: #9a5300;
+	--color-code-error: #b42318;
+
+	/* --- 形状与层次 --- */
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-pill: 999px;
+	--border-hairline: 1px solid var(--color-gray-300);
+	--rule-strong: 1px solid var(--color-contrast);
+	--shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.05);
+	--shadow-md: 0 6px 16px -6px rgba(17, 17, 17, 0.12);
+	--shadow-lg: 0 18px 40px -18px rgba(17, 17, 17, 0.28);
+
+	/* --- 动效。reduced-motion 下由使用方统一关掉 --- */
+	--transition-fast: 0.15s ease;
+	--transition-slow: 0.3s ease;
+
+	/* --- 页头与控件 --- */
+	--control-height: 44px;
+	--header-height: 80px;
+	--header-height-mobile: 64px;
+	--logo-height: 36px;
+	--logo-height-mobile: 30px;
+	--menu-icon-width: 22px;
+	--menu-icon-height: 16px;
+	--menu-icon-offset: 7px;
+	--color-panel: #191919;
+	--color-panel-text: #f4f4f4;
+	--color-panel-muted: #b7b7b7;
+	--color-panel-accent: #f1a4d4;
+	--color-link-rule: #bd4b91;
+	--color-surface-project: #f5f3f6;
+
+	/* --- 布局 --- */
+	--gutter: clamp(24px, 4vw, 48px);
+	--content-width: 1280px; /* 首页、栏目页、页头页脚 */
+	--content-narrow: 980px; /* 产品媒体的最大宽度 */
+	--console-width: 44rem; /* 控制台单栏 */
+	--measure: 44rem; /* 一行的字数上限 */
+}
+
+/* 暗色。只覆盖颜色与阴影；名字必须是上面已经声明的 token。
+ * 页面底比卡片深，卡片比卡片里的数据块深：越靠前的层越亮。 */
+@media (prefers-color-scheme: dark) {
+	:root[data-theme="auto"] {
+		color-scheme: dark;
+
+		--color-base: #18161b;
+		--color-contrast: #f1eef3;
+		--color-link: var(--color-brand-400);
+		--color-link-hover: var(--color-brand-100);
+		--color-accent-surface: #2c1726;
+		--color-accent-border: #5c2449;
+
+		--color-gray-050: #1c1a1f;
+		--color-gray-100: #222025;
+		--color-gray-300: #36333b;
+		--color-gray-400: #4b4751;
+		--color-gray-500: #a6a1ab;
+		--color-gray-700: #bcb7c1;
+
+		--color-canvas: #0f0e11;
+
+		--color-ok: #4ade80;
+		--color-ok-surface: #12301d;
+		--color-warn: #fbbf24;
+		--color-warn-surface: #36270a;
+		--color-bad: #f87171;
+		--color-bad-surface: #3a1616;
+
+		--color-code-string: #4fd1b9;
+		--color-code-number: #f4a64a;
+		--color-code-error: #ff8a80;
+
+		--color-panel: #232027;
+		--color-link-rule: var(--color-brand-500);
+		--color-surface-project: #211e24;
+
+		--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+		--shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.5);
+		--shadow-lg: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+	}
+}

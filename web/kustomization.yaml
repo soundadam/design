@@ -1,0 +1,31 @@
+# The cluster form of this directory: one ConfigMap `design` holding every
+# served file under its own name. A release pushes web/ as an OCI artifact
+# (.github/workflows/release.yml); Flux applies it into the namespace that
+# serves the files. Binary files land in binaryData.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  # Pods mount the ConfigMap by name, so the name stays stable and a
+  # release updates the mounted files in place.
+  disableNameSuffixHash: true
+  labels:
+    app.kubernetes.io/name: design
+configMapGenerator:
+  - name: design
+    files:
+      - tokens.css
+      - fonts.css
+      - console.css
+      - manrope-variable.woff2
+      - fira-code-variable.woff2
+      - OFL-Manrope.txt
+      - OFL-FiraCode.txt
+      - waveform.svg
+      - waveform-dark.svg
+      - mark.svg
+      - mark-compact.svg
+      - mark-compact-on-blue.svg
+      - favicon.svg
+      - favicon.ico
+      - apple-touch-icon.png
+      - icon-192.png
