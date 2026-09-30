@@ -57,7 +57,7 @@ Load the three stylesheets in order, then build the page from these blocks:
 
 | Block | Classes |
 | --- | --- |
-| Card | `section`, `h2`, `.hint` (`.hint.lead` above content), `.notice` (`.notice.ok` for a success receipt) |
+| Section (flat: a heading and a hairline, no card) | `section`, `h2`, `.hint` (`.hint.lead` above content), `.notice` (`.notice.ok` for a success receipt) |
 | Status | `.pill.ok` / `.warn` / `.bad` / `.muted`; `.dot`, `.dot.on` |
 | Figures | `.tiles` > `.tile[.ok\|.warn\|.bad\|.muted]` > `.label`, `.figure`, `.meter > span`, `.caption`; `.status-line` |
 | Product links | `ul.products > li > a > b + small` |
