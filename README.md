@@ -12,6 +12,8 @@ stylesheet for member consoles. Everything served lives flat in [`web/`](web/).
 | `web/*.woff2`, `web/OFL-*.txt` | Fonts and their licences |
 | `web/waveform.svg`, `web/waveform-dark.svg` | Lockup for light and dark pages |
 | `web/mark*.svg`, `web/favicon.*`, `web/*.png` | Marks and icons ([brand/README.md](brand/README.md)) |
+| `web/nav-*.svg` | Sidebar icons, drawn as CSS masks in the current text colour |
+| `web/version.txt` | The release's own version; consumers check the mount against it |
 
 ## Consumers
 
@@ -22,7 +24,7 @@ runtime.
 | Consumer | How it takes a release |
 | --- | --- |
 | soundadam.com (`soundadam/www-src`) | Hugo module `github.com/soundadam/design`, version in its `go.mod`; mounts are in [hugo.toml](hugo.toml) |
-| my.soundadam.com (`soundadam/platform-gitops`) | Flux `OCIRepository` on `oci://ghcr.io/soundadam/design`, semver `1.x`; `web/` becomes ConfigMap `design` ([web/kustomization.yaml](web/kustomization.yaml)), served at `/_design/` |
+| my.soundadam.com (`soundadam/platform-gitops`) | Flux `OCIRepository` on `oci://ghcr.io/soundadam/design` pinned to one tag, the same `DESIGN_VERSION` its pages carry; `web/` becomes ConfigMap `design` ([web/kustomization.yaml](web/kustomization.yaml)), served at `/_design/<version>/` only while `version.txt` matches |
 
 ## Dark mode
 
@@ -35,9 +37,9 @@ Load the three stylesheets in order, then build the page from these blocks:
 
 ```html
 <html lang="zh-CN" data-theme="auto">
-<link rel="stylesheet" href="/_design/fonts.css">
-<link rel="stylesheet" href="/_design/tokens.css">
-<link rel="stylesheet" href="/_design/console.css">
+<link rel="stylesheet" href="/_design/2.0.0/fonts.css">
+<link rel="stylesheet" href="/_design/2.0.0/tokens.css">
+<link rel="stylesheet" href="/_design/2.0.0/console.css">
 
 <header class="console-header"><div class="console-header-inner">
   <a class="console-brand" href="/"><picture>
@@ -56,8 +58,8 @@ Load the three stylesheets in order, then build the page from these blocks:
 | Block | Classes |
 | --- | --- |
 | Card | `section`, `h2`, `.hint` (`.hint.lead` above content), `.notice` |
-| Status | `.pill.ok` / `.warn` / `.bad`; `.dot`, `.dot.on` |
-| Figures | `.tiles` > `.tile[.ok\|.warn\|.bad]` > `.label`, `.figure`, `.meter > span`, `.caption`; `.status-line` |
+| Status | `.pill.ok` / `.warn` / `.bad` / `.muted`; `.dot`, `.dot.on` |
+| Figures | `.tiles` > `.tile[.ok\|.warn\|.bad\|.muted]` > `.label`, `.figure`, `.meter > span`, `.caption`; `.status-line` |
 | Product links | `ul.products > li > a > b + small` |
 | Tabs | `.tabset` > radios, `.tabs` > labels, `.panel` × n (up to four; order pairs them) |
 | Code and fields | `pre`, `.row > input + .button` |
@@ -67,14 +69,15 @@ Load the three stylesheets in order, then build the page from these blocks:
 | Chart | `svg.chart` of `rect`s, then `.axis > span × 2`; `.qr` holds an SVG code |
 | Stacked chart | `svg.chart.stacked` of `rect.series-N` (N = 1–6, 6 is「其他」), `ul.legend > li.series-N > .swatch` |
 | Table | `.table-wrap > table.data`, `.num` on number cells, `.share > span` as a share bar (takes `.series-N`) |
-| Sidebar | `.console-shell > nav.console-sidebar + main.console`; the nav holds `a` and `.side-group > .side-title + a…`, current link `aria-current="page"`; the header then spans the shell, and a `.console-footer` goes inside `main` |
+| Sidebar | `.console-shell > nav.console-sidebar + main.console`. The nav holds `input#side-toggle.side-toggle`, then `label.side-bar[for=side-toggle]` (`i.nav-icon.nav-menu`, a `span` naming the current page, `i.nav-icon.nav-chevron`), then `.side-list` with `a` (概览, led by `i.nav-icon.nav-grid`) and `.side-group > span.side-title(i.nav-icon.nav-<icon> + name) + a…`; current link `aria-current="page"`, icons `aria-hidden="true"`. Wide screens show the list as a column and hide the bar; narrow screens show the bar and open the list when the box is checked. The header then spans the shell, and a `.console-footer` goes inside `main` |
 
 ## Releases
 
 A tag `vX.Y.Z` on `main` publishes `web/`
-([.github/workflows/release.yml](.github/workflows/release.yml)). The
-cluster follows `1.x`, so a minor or patch release reaches production when
-Flux next polls.
+([.github/workflows/release.yml](.github/workflows/release.yml)); set
+`web/version.txt` to `X.Y.Z` in the same change, or the release stops.
+Consumers pin one version, so a release reaches production only when
+platform-gitops moves its pin together with the pages that use it.
 
 - **Major** when a consumer's page could break: a token, class, or file is
   removed or renamed, or the console markup changes shape.

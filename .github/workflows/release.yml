@@ -1,9 +1,9 @@
 name: Release
 
 # A tag vX.Y.Z publishes web/ as oci://ghcr.io/soundadam/design:X.Y.Z.
-# The cluster follows 1.x (soundadam/platform-gitops, Flux OCIRepository
-# `design`), so a minor or patch tag reaches production with no change
-# there. Hugo sites take the same tag through their go.mod.
+# Consumers pin an exact version: platform-gitops names the tag in Flux
+# OCIRepository `design` and in its console pages, and Hugo sites in their
+# go.mod. A tag reaches production only through a change there.
 
 on:
   push:
@@ -50,6 +50,8 @@ jobs:
           set -eux
           version="${GITHUB_REF_NAME#v}"
           echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'
+          # Consumers serve web/ under the version this file names.
+          test "$(cat web/version.txt)" = "$version"
           # flux reads ~/.docker/config.json; it has no login of its own.
           echo "$GITHUB_TOKEN" | docker login ghcr.io \
             --username "$GITHUB_ACTOR" --password-stdin

@@ -123,87 +123,233 @@ a:hover {
 	}
 }
 
-/* --- 侧边栏布局：页头下面左侧导航、右侧正文；窄屏时导航变成一行横向滚动 ---
+/* --- 侧边栏：页头下面左侧导航、右侧正文 ---
  * <div class="console-shell">
  *   <nav class="console-sidebar" aria-label="导航">
- *     <a href="/">概览</a>
- *     <div class="side-group"><span class="side-title">llm2</span>
- *       <a href="/llm2/" aria-current="page">概览</a><a href="/llm2/setup">接入</a></div>
+ *     <input type="checkbox" id="side-toggle" class="side-toggle">
+ *     <label for="side-toggle" class="side-bar"><i class="nav-icon nav-menu"></i>
+ *       <span>llm2 · 用量</span><i class="nav-icon nav-chevron"></i></label>
+ *     <div class="side-list">
+ *       <a href="/"><i class="nav-icon nav-grid"></i>概览</a>
+ *       <div class="side-group">
+ *         <span class="side-title"><i class="nav-icon nav-spark"></i>llm2</span>
+ *         <a href="/llm2/">我的 key</a><a href="/llm2/usage" aria-current="page">用量</a>
+ *       </div>
+ *     </div>
  *   </nav>
  *   <main class="console">…</main>
- * </div> */
+ * </div>
+ * 宽屏时是固定在左边的一列：产品是带图标的组标题，页面缩进挂在一条引导线下，
+ * 当前页所在产品的图标亮起。窄屏时收成一条「当前位置」按钮，点开是同样分组
+ * 的列表（复选框切换，不需要脚本）。<i> 图标都加 aria-hidden="true"。 */
 .console-shell {
-	max-width: calc(var(--console-width) + var(--console-sidebar-width) + 2 * var(--space-30));
+	max-width: calc(var(--console-sidebar-width) + var(--space-40) + var(--console-width) + 2 * var(--space-30));
 	margin: 0 auto;
 }
 
+.nav-icon {
+	flex: none;
+	width: 18px;
+	height: 18px;
+	background: currentColor;
+	-webkit-mask: center / contain no-repeat;
+	mask: center / contain no-repeat;
+}
+
+.nav-grid {
+	-webkit-mask-image: url("nav-grid.svg");
+	mask-image: url("nav-grid.svg");
+}
+
+.nav-spark {
+	-webkit-mask-image: url("nav-spark.svg");
+	mask-image: url("nav-spark.svg");
+}
+
+.nav-globe {
+	-webkit-mask-image: url("nav-globe.svg");
+	mask-image: url("nav-globe.svg");
+}
+
+.nav-menu {
+	-webkit-mask-image: url("nav-menu.svg");
+	mask-image: url("nav-menu.svg");
+}
+
+.nav-chevron {
+	-webkit-mask-image: url("nav-chevron.svg");
+	mask-image: url("nav-chevron.svg");
+	transition: transform 0.15s ease;
+}
+
 .console-sidebar {
-	display: flex;
-	gap: var(--space-10);
-	overflow-x: auto;
 	padding: var(--space-20) var(--space-30) 0;
 }
 
-.side-group {
-	display: contents;
+/* 复选框本身看不见，但仍可用键盘聚焦；焦点画在按钮上。 */
+.side-toggle {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+	pointer-events: none;
 }
 
-.side-title {
-	display: none;
-}
-
-.console-sidebar a {
-	color: var(--color-muted);
+.side-bar {
+	display: flex;
+	align-items: center;
+	gap: var(--space-20);
+	min-height: 44px;
+	padding: 0 var(--space-20);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-sm);
 	font-weight: 600;
-	font-size: var(--text-xs);
-	padding: var(--space-10) var(--space-20);
-	border-radius: var(--radius-md);
-	text-decoration: none;
+	cursor: pointer;
+	user-select: none;
+}
+
+.side-bar span {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.console-sidebar a:hover {
+.side-bar .nav-icon {
+	color: var(--color-muted);
+}
+
+.side-toggle:focus-visible + .side-bar {
+	outline: 2px solid var(--color-accent-marker);
+	outline-offset: 2px;
+}
+
+.side-toggle:checked + .side-bar .nav-chevron {
+	transform: rotate(180deg);
+}
+
+.side-list {
+	display: none;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: var(--space-10);
+	padding: var(--space-10);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-md);
+}
+
+.side-toggle:checked ~ .side-list {
+	display: flex;
+}
+
+.side-list a {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: var(--space-20);
+	min-height: 36px;
+	padding: 0 var(--space-20);
+	border-radius: var(--radius-md);
+	color: var(--color-muted);
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.side-list a:hover {
 	color: var(--color-contrast);
 	background: var(--color-surface-muted);
 }
 
-.console-sidebar a[aria-current] {
+.side-list a[aria-current] {
 	color: var(--color-contrast);
 	background: var(--color-accent-surface);
-	box-shadow: inset 2px 0 0 var(--color-accent-marker);
+	font-weight: 700;
+}
+
+.side-group {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: var(--space-20);
+	padding-top: var(--space-20);
+	border-top: 1px solid var(--color-border);
+}
+
+.side-title {
+	display: flex;
+	align-items: center;
+	gap: var(--space-20);
+	min-height: 32px;
+	padding: 0 var(--space-20);
+	color: var(--color-contrast);
+	font-weight: 700;
+}
+
+.side-title .nav-icon {
+	color: var(--color-muted);
+}
+
+.side-group:has([aria-current]) .side-title .nav-icon {
+	color: var(--color-accent-marker);
+}
+
+/* 组里的页面挂在一条竖线下，文字与组标题的文字对齐（18px 图标 + 间距）。 */
+.side-group a {
+	margin-left: calc(var(--space-20) + 8px);
+	padding-left: calc(var(--space-20) + 9px);
+	border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.side-group a::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: -1px;
+	bottom: -1px;
+	width: 1px;
+	background: var(--color-border);
+}
+
+.side-group a[aria-current]::before {
+	width: 2px;
+	background: var(--color-accent-marker);
 }
 
 @media (min-width: 900px) {
 	.console-shell {
 		display: grid;
 		grid-template-columns: var(--console-sidebar-width) minmax(0, 1fr);
-		gap: var(--space-30);
+		gap: var(--space-40);
 		padding-inline: var(--space-30);
 	}
 
+	/* 链接的底色向左伸出，图标与页头 logo 对齐。 */
 	.console-sidebar {
-		flex-direction: column;
 		align-self: start;
 		position: sticky;
 		top: var(--header-height);
-		overflow: visible;
+		max-height: calc(100vh - var(--header-height));
+		overflow-y: auto;
+		margin-left: calc(-1 * var(--space-20));
 		padding: var(--space-30) 0;
 	}
 
-	.side-group {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		margin-top: var(--space-20);
+	.side-bar {
+		display: none;
 	}
 
-	.side-title {
-		display: block;
-		color: var(--color-muted);
-		font-size: var(--text-2xs);
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		padding: 0 var(--space-20) var(--space-10);
+	.side-list {
+		display: flex;
+		margin: 0;
+		padding: 0;
+		background: none;
+		border: 0;
+		box-shadow: none;
 	}
 
 	.console-shell > .console {
@@ -213,7 +359,7 @@ a:hover {
 
 	/* 有侧边栏的页面，页头与整个布局同宽，logo 对齐侧边栏。 */
 	.console-header:has(+ .console-shell) .console-header-inner {
-		max-width: calc(var(--console-width) + var(--console-sidebar-width) + 4 * var(--space-30));
+		max-width: calc(var(--console-sidebar-width) + var(--space-40) + var(--console-width) + 2 * var(--space-30));
 	}
 }
 
@@ -295,6 +441,11 @@ h2 {
 	background: var(--color-bad-surface);
 }
 
+.pill.muted {
+	color: var(--color-muted);
+	background: var(--color-surface-muted);
+}
+
 /* --- 数据块 --- */
 .tiles {
 	display: grid;
@@ -322,6 +473,10 @@ h2 {
 	line-height: var(--leading-snug);
 	margin: var(--space-10) 0;
 	font-variant-numeric: tabular-nums;
+}
+
+.muted .figure {
+	color: var(--color-muted);
 }
 
 .ok .figure {
@@ -748,8 +903,15 @@ summary {
 
 /* --- 数据表：<div class="table-wrap"><table class="data">…</table></div>，
  * 数字列加 .num；单元格里的 .share > span 是占比条 --- */
+/* 表比卡片宽时横向滚动；还有没露出来的列时，那一侧边缘有一道阴影。
+ * 随内容滚动的底色（local）盖住阴影，滚到头时阴影才露出来或消失。 */
 .table-wrap {
 	overflow-x: auto;
+	background:
+		linear-gradient(to right, var(--color-surface) 30%, transparent) left / 32px 100% no-repeat local,
+		linear-gradient(to left, var(--color-surface) 30%, transparent) right / 32px 100% no-repeat local,
+		radial-gradient(farthest-side at 0 50%, var(--color-scroll-edge), transparent) left / 12px 100% no-repeat scroll,
+		radial-gradient(farthest-side at 100% 50%, var(--color-scroll-edge), transparent) right / 12px 100% no-repeat scroll;
 }
 
 .data {
