@@ -45,8 +45,8 @@
 	--color-gray-700: #626262;
 
 	/* --- 界面层次：控制台这类「页面底 + 卡片」的布局用这组 --- */
-	--color-canvas: var(--color-gray-100); /* 页面底 */
-	--color-surface: var(--color-base); /* 卡片 */
+	--color-canvas: var(--color-base); /* 页面底；控制台的分节直接铺在这上面 */
+	--color-surface: var(--color-base); /* 浮层：窄屏菜单、选中的标签 */
 	--color-surface-muted: var(--color-gray-100); /* 卡片里的数据块、代码、输入框 */
 	--color-border: var(--color-gray-300);
 	--color-muted: var(--color-gray-500); /* 次要文字 */
@@ -87,6 +87,12 @@
 	--font-sans: Manrope, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
 		"PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC",
 		"Microsoft YaHei", sans-serif;
+	/* 控制台正文：系统界面字体。苹方与 SF、微软雅黑与 Segoe UI 是成对设计的，
+	 * 中英混排时字重、字高对得上；Manrope 的几何字形配苹方反而显得生硬。
+	 * 中文字体排在 system-ui 前面，Linux 上才不会先落到某个半套汉字的字体。 */
+	--font-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+		"Segoe UI", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC",
+		system-ui, sans-serif;
 	--font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 	--font-editorial: Georgia, "Noto Serif CJK SC", "Songti SC", STSong, serif;
 

@@ -155,6 +155,9 @@ func TestTextContrast(t *testing.T) {
 		{"color-warn", "color-surface-muted"},
 		{"color-bad", "color-surface-muted"},
 		{"color-bad", "color-surface"},
+		// Sections sit on the page background, so their text does too.
+		{"color-link", "color-canvas"},
+		{"color-bad", "color-canvas"},
 	}
 	light, dark := themes(t)
 	merged := map[string]string{}
