@@ -34,4 +34,7 @@ configMapGenerator:
       - nav-globe.svg
       - nav-menu.svg
       - nav-chevron.svg
+      - nav-users.svg
+      - nav-server.svg
+      - nav-external.svg
       - version.txt

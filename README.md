@@ -57,19 +57,21 @@ Load the three stylesheets in order, then build the page from these blocks:
 
 | Block | Classes |
 | --- | --- |
-| Card | `section`, `h2`, `.hint` (`.hint.lead` above content), `.notice` |
+| Card | `section`, `h2`, `.hint` (`.hint.lead` above content), `.notice` (`.notice.ok` for a success receipt) |
 | Status | `.pill.ok` / `.warn` / `.bad` / `.muted`; `.dot`, `.dot.on` |
 | Figures | `.tiles` > `.tile[.ok\|.warn\|.bad\|.muted]` > `.label`, `.figure`, `.meter > span`, `.caption`; `.status-line` |
 | Product links | `ul.products > li > a > b + small` |
 | Tabs | `.tabset` > radios, `.tabs` > labels, `.panel` × n (up to four; order pairs them) |
 | Code and fields | `pre`, `.row > input + .button` |
-| Buttons | `.button`, `.button.secondary`, `.button.danger`; `.actions` wraps a lone one |
+| Buttons | `.button`, `.button.secondary`, `.button.danger`; `.button.compact` sizes one to its content for table rows; `.actions` wraps a lone one |
+| Form fields | `.fields > label.field > span + input\|select` (`.field.wide` spans the row) |
+| Toggles | `.toggles > label.toggle > input[type=checkbox] + span`: pick several short options inline; `.inline` lines up toggles and buttons |
 | Lists | `ul.list > li` (last child is the muted value), `ul.chips > li` |
 | Choices | `.choices > label.choice > input + span > b + small` |
 | Chart | `svg.chart` of `rect`s, then `.axis > span × 2`; `.qr` holds an SVG code |
 | Stacked chart | `svg.chart.stacked` of `rect.series-N` (N = 1–6, 6 is「其他」), `ul.legend > li.series-N > .swatch` |
 | Table | `.table-wrap > table.data`, `.num` on number cells, `.share > span` as a share bar (takes `.series-N`) |
-| Sidebar | `.console-shell > nav.console-sidebar + main.console`. The nav holds `input#side-toggle.side-toggle`, then `label.side-bar[for=side-toggle]` (`i.nav-icon.nav-menu`, a `span` naming the current page, `i.nav-icon.nav-chevron`), then `.side-list` with `a` (概览, led by `i.nav-icon.nav-grid`) and `.side-group > span.side-title(i.nav-icon.nav-<icon> + name) + a…`; current link `aria-current="page"`, icons `aria-hidden="true"`. Wide screens show the list as a column and hide the bar; narrow screens show the bar and open the list when the box is checked. The header then spans the shell, and a `.console-footer` goes inside `main` |
+| Sidebar | `.console-shell > nav.console-sidebar + main.console`. The nav holds `input#side-toggle.side-toggle`, then `label.side-bar[for=side-toggle]` (`i.nav-icon.nav-menu`, a `span` naming the current page, `i.nav-icon.nav-chevron`), then `.side-list` with `a` (概览, led by `i.nav-icon.nav-grid`) and `.side-group > span.side-title(i.nav-icon.nav-<icon> + name) + a…`; a link to another site ends with `i.nav-icon.nav-external`; current link `aria-current="page"`, icons `aria-hidden="true"`. Wide screens show the list as a column and hide the bar; narrow screens show the bar and open the list when the box is checked. The header then spans the shell, and a `.console-footer` goes inside `main` |
 
 ## Releases
 
