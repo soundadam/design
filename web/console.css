@@ -182,6 +182,29 @@ a:hover {
 	transition: transform 0.15s ease;
 }
 
+.nav-users {
+	-webkit-mask-image: url("nav-users.svg");
+	mask-image: url("nav-users.svg");
+}
+
+.nav-server {
+	-webkit-mask-image: url("nav-server.svg");
+	mask-image: url("nav-server.svg");
+}
+
+/* 指向别的站点的侧边栏链接末尾的小箭头：<a>名字<i class="nav-icon nav-external"></i></a>。 */
+.nav-external {
+	-webkit-mask-image: url("nav-external.svg");
+	mask-image: url("nav-external.svg");
+}
+
+.side-list .nav-external {
+	width: 12px;
+	height: 12px;
+	margin-left: auto;
+	opacity: 0.6;
+}
+
 .console-sidebar {
 	padding: var(--space-20) var(--space-30) 0;
 }
@@ -415,6 +438,12 @@ h2 {
 	padding: var(--space-20) var(--space-30);
 	margin-bottom: var(--space-30);
 	font-weight: 600;
+}
+
+/* 操作成功后的回执，与 .notice 同形。 */
+.notice.ok {
+	background: var(--color-ok-surface);
+	color: var(--color-ok);
 }
 
 .pill {
@@ -720,6 +749,17 @@ pre {
 	cursor: default;
 }
 
+/* 表格行里、标题旁的小按钮：按内容宽，与 .toggle 同高。 */
+.button.compact {
+	display: inline-block;
+	width: auto;
+	min-height: 0;
+	padding: 2px var(--space-20);
+	font-size: var(--text-2xs);
+	line-height: 1.8;
+	white-space: nowrap;
+}
+
 .actions {
 	margin-top: var(--space-20);
 }
@@ -810,6 +850,101 @@ pre {
 .choice small {
 	color: var(--color-muted);
 	font-size: var(--text-xs);
+}
+
+/* --- 表单字段：<div class="fields"><label class="field"><span>名称</span><input>…</label>…</div>
+ * 宽屏自动排成多列；.field.wide 独占一行。 --- */
+.fields {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+	gap: var(--space-20);
+	margin-bottom: var(--space-30);
+}
+
+.field {
+	display: grid;
+	gap: var(--space-10);
+	min-width: 0;
+}
+
+.field.wide {
+	grid-column: 1 / -1;
+}
+
+.field > span {
+	color: var(--color-muted);
+	font-size: var(--text-2xs);
+	font-weight: 600;
+}
+
+.field input,
+.field select {
+	width: 100%;
+	min-height: var(--control-height);
+	font: inherit;
+	padding: 0 var(--space-20);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	color: var(--color-contrast);
+}
+
+.field input:focus-visible,
+.field select:focus-visible {
+	outline: 2px solid var(--color-accent-marker);
+	outline-offset: 0;
+}
+
+/* --- 开关签：一排可多选的小签，勾上即高亮。
+ * <span class="toggles"><label class="toggle"><input type="checkbox" …><span>llm2</span></label>…</span> --- */
+.toggles {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: var(--space-10);
+	vertical-align: middle;
+}
+
+.toggle {
+	position: relative;
+	cursor: pointer;
+}
+
+.toggle input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+}
+
+.toggle span {
+	display: inline-block;
+	padding: 2px var(--space-20);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-pill);
+	color: var(--color-muted);
+	font-size: var(--text-2xs);
+	font-weight: 700;
+	line-height: 1.8;
+	transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.toggle input:checked + span {
+	background: var(--color-accent-surface);
+	border-color: var(--color-accent-marker);
+	color: var(--color-link);
+}
+
+.toggle input:focus-visible + span {
+	outline: 2px solid var(--color-accent-marker);
+	outline-offset: 2px;
+}
+
+/* 一行里的若干控件：开关签、按钮挨着排，窄屏折行。 */
+.inline {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-10) var(--space-20);
 }
 
 /* --- 折叠与二维码 --- */

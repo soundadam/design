@@ -138,6 +138,7 @@ func TestTextContrast(t *testing.T) {
 	pairs := [][2]string{
 		{"color-contrast", "color-base"},
 		{"color-contrast", "color-canvas"},
+		{"color-contrast", "color-surface"},
 		{"color-contrast", "color-surface-muted"},
 		{"color-muted", "color-surface"},
 		{"color-muted", "color-surface-muted"},
