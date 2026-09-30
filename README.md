@@ -65,6 +65,9 @@ Load the three stylesheets in order, then build the page from these blocks:
 | Lists | `ul.list > li` (last child is the muted value), `ul.chips > li` |
 | Choices | `.choices > label.choice > input + span > b + small` |
 | Chart | `svg.chart` of `rect`s, then `.axis > span × 2`; `.qr` holds an SVG code |
+| Stacked chart | `svg.chart.stacked` of `rect.series-N` (N = 1–6, 6 is「其他」), `ul.legend > li.series-N > .swatch` |
+| Table | `.table-wrap > table.data`, `.num` on number cells, `.share > span` as a share bar (takes `.series-N`) |
+| Sidebar | `.console-shell > nav.console-sidebar + main.console`; the nav holds `a` and `.side-group > .side-title + a…`, current link `aria-current="page"`; the header then spans the shell, and a `.console-footer` goes inside `main` |
 
 ## Releases
 
