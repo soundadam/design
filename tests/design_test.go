@@ -21,7 +21,7 @@ var (
 	declaration = regexp.MustCompile(`(?s)--([a-z0-9-]+)\s*:\s*(.*?);`)
 	varUse      = regexp.MustCompile(`var\(--([a-z0-9-]+)\)`)
 	colorLit    = regexp.MustCompile(`#[0-9a-fA-F]{3,8}\b|rgba?\(`)
-	fontURL     = regexp.MustCompile(`url\("([^"]+)"\)`)
+	cssURL      = regexp.MustCompile(`url\("([^"]+)"\)`)
 	hexColor    = regexp.MustCompile(`^#([0-9a-fA-F]{6})$`)
 	varOnly     = regexp.MustCompile(`^var\(--([a-z0-9-]+)\)$`)
 )
@@ -144,6 +144,7 @@ func TestTextContrast(t *testing.T) {
 		{"color-muted", "color-canvas"},
 		{"color-link", "color-surface"},
 		{"color-link", "color-accent-surface"},
+		{"color-contrast", "color-accent-surface"},
 		{"color-on-cta", "color-cta"},
 		{"color-on-cta", "color-cta-hover"},
 		{"color-ok", "color-ok-surface"},
@@ -204,10 +205,25 @@ func TestArtifactCarriesEveryFile(t *testing.T) {
 	}
 }
 
-func TestFontURLsResolve(t *testing.T) {
-	for _, m := range fontURL.FindAllStringSubmatch(read(t, "fonts.css"), -1) {
-		if _, err := os.Stat(filepath.Join(web, m[1])); err != nil {
-			t.Errorf("fonts.css points at %s: %v", m[1], err)
+func TestURLsResolve(t *testing.T) {
+	for _, name := range stylesheets(t) {
+		for _, m := range cssURL.FindAllStringSubmatch(read(t, name), -1) {
+			if _, err := os.Stat(filepath.Join(web, m[1])); err != nil {
+				t.Errorf("%s points at %s: %v", name, m[1], err)
+			}
 		}
+	}
+}
+
+// version.txt names the release it ships in; consumers serve web/ under
+// that version and refuse a mount that says otherwise. The release workflow
+// checks it against the tag.
+func TestVersionFile(t *testing.T) {
+	b, err := os.ReadFile(filepath.Join(web, "version.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !regexp.MustCompile(`^[0-9]+\.[0-9]+\.[0-9]+\n$`).Match(b) {
+		t.Errorf("version.txt is %q, want X.Y.Z and a newline", b)
 	}
 }

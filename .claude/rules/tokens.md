@@ -16,9 +16,11 @@ changes soundadam.com and every console on the next release. Look at both
 in light and dark (www-src: both languages, both breakpoints) before
 tagging.
 
-**Pick the version by what a consumer's page could lose.** The cluster
-follows `1.x` without review, so removing or renaming a token, class, or
-file, or changing console markup, is a major release. See README.md.
+**Pick the version by what a consumer's page could lose.** Removing or
+renaming a token, class, or file, or changing console markup, is a major
+release; `web/version.txt` names the release it ships in. Consumers pin
+an exact version, so the number tells them what an upgrade costs. See
+README.md.
 
 **Nothing is loaded across origins at runtime.** A consumer takes a
 release at build or deploy time and serves `web/` itself; do not add a

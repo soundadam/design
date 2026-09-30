@@ -29,3 +29,9 @@ configMapGenerator:
       - favicon.ico
       - apple-touch-icon.png
       - icon-192.png
+      - nav-grid.svg
+      - nav-spark.svg
+      - nav-globe.svg
+      - nav-menu.svg
+      - nav-chevron.svg
+      - version.txt
