@@ -6,16 +6,16 @@
   [[module.mounts]]
     source = "web"
     target = "assets/design"
-    includeFiles = ["*.css"]
+    files = ["*.css"]
   [[module.mounts]]
     source = "web"
     target = "static/fonts"
-    includeFiles = ["*.woff2", "OFL-*.txt"]
+    files = ["*.woff2", "OFL-*.txt"]
   [[module.mounts]]
     source = "web"
     target = "assets/img/logo"
-    includeFiles = ["waveform*.svg", "mark*.svg"]
+    files = ["waveform*.svg", "mark*.svg"]
   [[module.mounts]]
     source = "web"
     target = "static"
-    includeFiles = ["favicon.*", "apple-touch-icon.png", "icon-192.png"]
+    files = ["favicon.*", "apple-touch-icon.png", "icon-192.png"]
