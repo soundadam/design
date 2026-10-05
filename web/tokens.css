@@ -82,17 +82,14 @@
 	--space-70: clamp(56px, 9vw, 104px); /* 栏目段落之间的呼吸 */
 
 	/* --- 排版 ---
-	 * Manrope 不含汉字，中文页会回落到系统字体。显式写出 CJK 栈，免得
-	 * macOS 拿到苹方、Windows 拿到宋体，两边字重完全不一样。 */
-	--font-sans: Manrope, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-		"PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC",
-		"Microsoft YaHei", sans-serif;
-	/* 控制台正文：系统界面字体。苹方与 SF、微软雅黑与 Segoe UI 是成对设计的，
-	 * 中英混排时字重、字高对得上；Manrope 的几何字形配苹方反而显得生硬。
-	 * 中文字体排在 system-ui 前面，Linux 上才不会先落到某个半套汉字的字体。 */
-	--font-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
-		"Segoe UI", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC",
-		system-ui, sans-serif;
+	 * 中英文都用 Noto Sans SC。先点本机的名字：Linux 桌面装的叫 Noto Sans
+	 * CJK SC，自己装过的叫 Noto Sans SC，有就整套用本机的，不下载。没有的话
+	 * 西文用 fonts.css 下发的 Latin；汉字苹果设备用苹方，其余（Windows）用下发
+	 * 的 Han。微软雅黑不进栈：它在 Windows 上排在 Han 前面就会顶掉 Noto，在
+	 * Linux 上 fontconfig 还会把这个名字映射成文泉驿。 */
+	--font-sans: "Noto Sans CJK SC", "Noto Sans SC", "Noto Sans SC Latin",
+		"PingFang SC", "Hiragino Sans GB", "Noto Sans SC Han", system-ui,
+		-apple-system, "Segoe UI", sans-serif;
 	--font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 	--font-editorial: Georgia, "Noto Serif CJK SC", "Songti SC", STSong, serif;
 
@@ -153,7 +150,11 @@
 	--menu-icon-width: 22px;
 	--menu-icon-height: 16px;
 	--menu-icon-offset: 7px;
+	/* 深色面板：项目卡片的命令块，以及两个站共用的顶栏（header.css）。
+	 * 顶栏在亮色、暗色页面上都是深色。 */
 	--color-panel: #191919;
+	--color-panel-raised: #232226; /* 顶栏展开的菜单面板 */
+	--color-panel-rule: #3a393e; /* 面板里的分隔线 */
 	--color-panel-text: #f4f4f4;
 	--color-panel-muted: #b7b7b7;
 	--color-panel-accent: #f1a4d4;
@@ -209,7 +210,9 @@
 		--color-code-number: #f4a64a;
 		--color-code-error: #ff8a80;
 
-		--color-panel: #232027;
+		--color-panel: #1d1b21;
+		--color-panel-raised: #26232b;
+		--color-panel-rule: #3d3943;
 		--color-link-rule: var(--color-brand-500);
 		--color-surface-project: #211e24;
 

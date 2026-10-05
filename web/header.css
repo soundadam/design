@@ -1,0 +1,478 @@
+/* 顶栏：soundadam.com 与 my.soundadam.com 共用的一条深色全宽栏。
+ *
+ * logo 在左；右边是站点栏目（关于 / 项目 / 博客）、Console 按钮，
+ * 再往右是语言切换或当前账号。两个站用同一套标记，见 README.md 的「顶栏」。
+ * 亮色、暗色页面上栏都是深色，所以 logo 用 waveform-dark.svg。
+ *
+ * 两层外壳不要合并：<header class="site-bar"> 是 sticky 的，里面的
+ * .site-header 是 position: relative，桌面端的展开面板挂在它下面。两层合成
+ * 一层，relative 会盖掉 sticky。两层都不能有 filter、backdrop-filter、
+ * transform：窄屏抽屉相对视口 fixed 定位。
+ *
+ * 展开面板与窄屏抽屉要脚本：脚本给 .site-header 加 .is-enhanced，给打开的
+ * .mega-item 加 .is-open，给打开的抽屉加 .is-active。没有脚本时栏目链接照常
+ * 可点，窄屏上换到第二行。依赖 fonts.css 与 tokens.css 先加载。 */
+
+.site-bar {
+	background: var(--color-panel);
+	color: var(--color-panel-text);
+	font-family: var(--font-sans);
+	position: sticky;
+	top: 0;
+	z-index: 20;
+}
+
+.site-header {
+	position: relative;
+}
+
+.site-header-inner {
+	display: flex;
+	align-items: center;
+	gap: var(--space-30);
+	min-height: var(--header-height);
+	max-width: var(--content-width);
+	padding-inline: var(--gutter);
+	margin-inline: auto;
+}
+
+.site-header-brand {
+	flex-shrink: 0;
+	margin-right: auto;
+}
+
+.site-logo,
+.site-logo a {
+	display: block;
+	line-height: 0;
+}
+
+.site-header-brand img {
+	display: block;
+	height: var(--logo-height);
+	width: auto;
+}
+
+.site-header-menu {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-40);
+}
+
+.site-header-items {
+	display: flex;
+	align-items: stretch;
+	gap: var(--space-40);
+}
+
+/* --- 栏目：链接本身，加一个只在有脚本时出现的展开按钮 --- */
+.mega-item__label {
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--space-10);
+}
+
+.mega-item__label > a {
+	color: var(--color-panel-text);
+	display: flex;
+	align-items: center;
+	min-height: var(--header-height);
+	position: relative;
+	text-decoration: none;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.mega-item__label > a::after {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 3px;
+	background: var(--color-cta);
+	content: "";
+	transform: scaleX(0);
+	transition: transform var(--transition-fast);
+}
+
+.mega-item.is-open .mega-item__label > a::after,
+.mega-item__label > a[aria-current]::after {
+	transform: scaleX(1);
+}
+
+.mega-item__label > a:hover {
+	color: var(--color-panel-accent);
+}
+
+.mega-item__toggle {
+	align-items: center;
+	justify-content: center;
+	display: none;
+	background: transparent;
+	color: var(--color-panel-muted);
+	cursor: pointer;
+	border: 0;
+	min-height: var(--control-height);
+	width: var(--space-20);
+	padding: 0;
+}
+
+.is-enhanced .mega-item__toggle {
+	display: inline-flex;
+}
+
+.mega-item__toggle span {
+	border-right: 1.5px solid currentColor;
+	border-bottom: 1.5px solid currentColor;
+	width: var(--space-10);
+	height: var(--space-10);
+	transform: translateY(-2px) rotate(45deg);
+}
+
+.mega-item__toggle[aria-expanded="true"] span {
+	transform: translateY(2px) rotate(225deg);
+}
+
+/* --- Console 按钮、语言、账号 --- */
+.site-header-cta a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: var(--control-height);
+	padding: 0 var(--space-30);
+	border-radius: var(--radius-md);
+	background: var(--color-cta);
+	color: var(--color-on-cta);
+	font-size: var(--text-sm);
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background var(--transition-fast);
+}
+
+.site-header-cta a:hover,
+.site-header-cta a:focus-visible {
+	background: var(--color-cta-hover);
+	color: var(--color-on-cta);
+}
+
+.site-header-language a,
+.site-header-account {
+	color: var(--color-panel-muted);
+	font-size: var(--text-xs);
+	white-space: nowrap;
+}
+
+.site-header-language a {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--control-height);
+	text-decoration: none;
+}
+
+.site-header-language a:hover {
+	color: var(--color-panel-text);
+	text-decoration: underline;
+}
+
+.site-header-account {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-10);
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.site-header-account a {
+	color: var(--color-panel-text);
+}
+
+.site-header-account a:hover {
+	color: var(--color-panel-accent);
+}
+
+.site-bar :focus-visible {
+	outline-color: var(--color-panel-accent);
+}
+
+/* --- 窄屏抽屉的开关 --- */
+.hamburger {
+	display: none;
+	border: 0;
+	padding: 0;
+	width: var(--control-height);
+	height: var(--control-height);
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	background: transparent;
+	color: var(--color-panel-text);
+}
+
+.hamburger-box {
+	display: block;
+	position: relative;
+	width: var(--menu-icon-width);
+	height: var(--menu-icon-height);
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+	width: var(--menu-icon-width);
+	height: 1.5px;
+	background: currentColor;
+	position: absolute;
+	left: 0;
+	top: var(--menu-icon-offset);
+	transition: transform var(--transition-fast);
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after {
+	content: "";
+}
+
+.hamburger-inner::before {
+	top: calc(-1 * var(--menu-icon-offset));
+}
+
+.hamburger-inner::after {
+	top: var(--menu-icon-offset);
+}
+
+.hamburger.is-active .hamburger-inner {
+	background: transparent;
+}
+
+.hamburger.is-active .hamburger-inner::before {
+	top: 0;
+	transform: rotate(45deg);
+}
+
+.hamburger.is-active .hamburger-inner::after {
+	top: 0;
+	transform: rotate(-45deg);
+}
+
+/* --- 展开面板：栏下面一整条，内容与栏同宽对齐 --- */
+.mega-panel {
+	display: none;
+	background: var(--color-panel-raised);
+	color: var(--color-panel-text);
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 100%;
+	border-top: 1px solid var(--color-panel-rule);
+	box-shadow: var(--shadow-lg);
+	padding-block: var(--space-50);
+}
+
+.mega-item.is-open .mega-panel {
+	display: block;
+}
+
+.mega-panel__columns {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-50);
+	margin-inline: auto;
+	max-width: var(--content-width);
+	padding-inline: var(--gutter);
+}
+
+.mega-panel__column {
+	flex: 1 1 14rem;
+	min-width: 0;
+}
+
+.mega-panel__title {
+	color: var(--color-panel-muted);
+	font-family: var(--font-mono);
+	font-size: var(--text-2xs);
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-wide);
+	margin: 0;
+}
+
+.mega-panel hr {
+	border: 0;
+	border-top: 1px solid var(--color-panel-rule);
+	margin: var(--space-20) 0;
+}
+
+.mega-panel__links {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.mega-panel__links li {
+	margin: 0;
+}
+
+.mega-panel__links a {
+	display: block;
+	padding-block: var(--space-20);
+	color: var(--color-panel-text);
+	text-decoration: none;
+}
+
+.mega-panel__links a:hover .mega-panel__label {
+	color: var(--color-panel-accent);
+}
+
+.mega-panel__label {
+	display: block;
+	font-size: var(--text-base);
+	font-weight: 500;
+}
+
+.mega-panel__desc {
+	display: block;
+	color: var(--color-panel-muted);
+	font-size: var(--text-xs);
+	margin-top: var(--space-10);
+	max-width: 40rem;
+}
+
+body.has-menu-active {
+	overflow: hidden;
+}
+
+@media (max-width: 999px) {
+	.site-header-brand {
+		flex-shrink: 1;
+		min-width: 0;
+	}
+
+	.site-header-inner {
+		min-height: var(--header-height-mobile);
+		flex-wrap: wrap;
+		gap: 0 var(--space-30);
+	}
+
+	.site-header-brand img {
+		max-height: var(--logo-height-mobile);
+		height: auto;
+		max-width: 100%;
+	}
+
+	/* 没有脚本：栏目换到第二行，一行排开。 */
+	.site-header:not(.is-enhanced) .site-header-inner {
+		padding-top: var(--space-20);
+	}
+
+	.site-header-menu {
+		order: 3;
+		width: 100%;
+		justify-content: space-between;
+		gap: var(--space-30);
+		padding-bottom: var(--space-10);
+	}
+
+	.site-header-items {
+		gap: var(--space-30);
+	}
+
+	.mega-item__label > a {
+		min-height: var(--control-height);
+	}
+
+	.site-header-cta a {
+		min-height: calc(var(--control-height) - var(--space-20));
+		padding-inline: var(--space-20);
+	}
+
+	/* 有脚本：栏目收进抽屉，汉堡按钮打开。 */
+	.site-header.is-enhanced .site-header-inner {
+		flex-wrap: nowrap;
+	}
+
+	.is-enhanced .hamburger {
+		display: inline-flex;
+	}
+
+	.is-enhanced .site-header-menu {
+		display: none;
+		position: fixed;
+		top: var(--header-height-mobile);
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: var(--color-panel);
+		overflow-y: auto;
+		padding: var(--space-20) var(--gutter) var(--space-40);
+	}
+
+	.is-enhanced .site-header-menu.is-active {
+		display: flex;
+		align-items: stretch;
+		flex-direction: column;
+		gap: var(--space-30);
+	}
+
+	.is-enhanced .site-header-items {
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.is-enhanced .mega-item__label {
+		border-bottom: 1px solid var(--color-panel-rule);
+	}
+
+	.is-enhanced .mega-item__label > a {
+		flex: 1;
+		font-size: var(--text-lg);
+		padding-block: var(--space-20);
+	}
+
+	.is-enhanced .mega-item__toggle {
+		width: var(--control-height);
+	}
+
+	.mega-panel {
+		position: static;
+		background: transparent;
+		border: 0;
+		box-shadow: none;
+		padding-block: var(--space-20);
+	}
+
+	.mega-panel__columns {
+		padding: 0;
+		gap: var(--space-20);
+	}
+
+	.mega-panel__column {
+		flex-basis: 100%;
+	}
+
+	.mega-item.is-open .mega-item__label {
+		border-bottom: 3px solid var(--color-cta);
+	}
+
+	.mega-item__label > a::after {
+		display: none;
+	}
+
+	.is-enhanced .site-header-cta a {
+		width: 100%;
+		min-height: var(--control-height);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mega-item__label > a::after,
+	.hamburger-inner,
+	.hamburger-inner::before,
+	.hamburger-inner::after,
+	.site-header-cta a {
+		transition: none;
+	}
+}
