@@ -1,12 +1,41 @@
 /* 字体文件与这个样式表放在同一目录，url() 相对本文件解析。
- * 许可证：OFL-Manrope.txt、OFL-FiraCode.txt。 */
+ * 许可证：OFL-NotoSansSC.txt、OFL-FiraCode.txt。
+ *
+ * 中英文都用 Noto Sans SC，本机装了就不下载（tokens.css 的 --font-sans 先点
+ * 本机的名字）。这里的两个家族只给没装的设备：
+ * - Noto Sans SC Latin：西文与西文标点，约 56 KB。苹果设备只下这一份，汉字
+ *   用苹方。
+ * - Noto Sans SC Han：GB 2312 一级的 3755 个常用字与中文标点，字重 400–700，
+ *   按码位切成两份，各约 0.5 MB，Windows 用。生僻字落到系统字体。
+ * 文件由 fonts/subset.py 生成，unicode-range 也照它的输出填。 */
 
 @font-face {
-	font-family: Manrope;
+	font-family: "Noto Sans SC Latin";
 	font-style: normal;
-	font-weight: 200 800;
+	font-weight: 100 900;
 	font-display: swap;
-	src: url("manrope-variable.woff2") format("woff2");
+	src: url("noto-sans-sc-latin.woff2") format("woff2");
+	unicode-range: U+0020-007E, U+00A0-00B6, U+00B8-00FF, U+2000-2013, U+2015-2017,
+		U+201A-201B, U+201E-2025, U+2027-206F, U+20AC, U+2122, U+2212;
+}
+
+@font-face {
+	font-family: "Noto Sans SC Han";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("noto-sans-sc-han-1.woff2") format("woff2");
+	unicode-range: U+00B7, U+2014, U+2018-2019, U+201C-201D, U+2026, U+3000-303F,
+		U+FF00-FFEF, U+4E00-6BFF;
+}
+
+@font-face {
+	font-family: "Noto Sans SC Han";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("noto-sans-sc-han-2.woff2") format("woff2");
+	unicode-range: U+6C00-9FFF;
 }
 
 @font-face {

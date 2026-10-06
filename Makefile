@@ -1,4 +1,4 @@
-.PHONY: check test brand artifact
+.PHONY: check test brand artifact fonts
 
 # The local gate; CI runs the same target.
 check: test artifact
@@ -16,3 +16,9 @@ artifact:
 # change, then make check.
 brand:
 	python3 brand/src/build_vector_logos.py
+
+# Recuts web/noto-sans-sc-*.woff2 from NotoSansSC[wght].ttf (google/fonts,
+# ofl/notosanssc): make fonts SRC=path/to/NotoSansSC[wght].ttf, then copy
+# the printed unicode-range lines into web/fonts.css.
+fonts:
+	uv run fonts/subset.py "$(SRC)"

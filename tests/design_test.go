@@ -158,6 +158,13 @@ func TestTextContrast(t *testing.T) {
 		// Sections sit on the page background, so their text does too.
 		{"color-link", "color-canvas"},
 		{"color-bad", "color-canvas"},
+		// The shared top bar and its open panels (header.css).
+		{"color-panel-text", "color-panel"},
+		{"color-panel-muted", "color-panel"},
+		{"color-panel-accent", "color-panel"},
+		{"color-panel-text", "color-panel-raised"},
+		{"color-panel-muted", "color-panel-raised"},
+		{"color-panel-accent", "color-panel-raised"},
 	}
 	light, dark := themes(t)
 	merged := map[string]string{}
@@ -206,6 +213,33 @@ func TestArtifactCarriesEveryFile(t *testing.T) {
 	slices.Sort(present)
 	if !slices.Equal(listed, present) {
 		t.Errorf("web/kustomization.yaml lists %v\nweb/ holds %v", listed, present)
+	}
+}
+
+// The API server refuses a ConfigMap over 1 MiB, and Flux then applies none
+// of the release; a font that grows past it needs a ConfigMap of its own.
+func TestEachConfigMapFits(t *testing.T) {
+	b, err := os.ReadFile(filepath.Join(web, "kustomization.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	sizes := map[string]int64{}
+	var name string
+	for _, line := range strings.Split(string(b), "\n") {
+		if n, ok := strings.CutPrefix(line, "  - name: "); ok {
+			name = strings.TrimSpace(n)
+		} else if item, ok := strings.CutPrefix(line, "      - "); ok {
+			info, err := os.Stat(filepath.Join(web, strings.TrimSpace(item)))
+			if err != nil {
+				t.Fatal(err)
+			}
+			sizes[name] += info.Size()
+		}
+	}
+	for name, size := range sizes {
+		if size >= 1<<20 {
+			t.Errorf("ConfigMap %s holds %d bytes, over 1 MiB", name, size)
+		}
 	}
 }
 
