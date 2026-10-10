@@ -50,6 +50,9 @@
 	--color-surface-muted: var(--color-gray-100); /* 卡片里的数据块、代码、输入框 */
 	--color-border: var(--color-gray-300);
 	--color-muted: var(--color-gray-500); /* 次要文字 */
+	--color-sidebar: #f6f6f7; /* 控制台侧栏：比页面底深一档，贴着窗口左边 */
+	--color-sidebar-hover: #eaeaec;
+	--color-heat: var(--color-brand-500); /* 活跃度格子；深浅用不透明度分档 */
 
 	/* --- 状态色：文字色与它的浅底成对使用 --- */
 	--color-ok: #15803d;
@@ -145,6 +148,8 @@
 	--transition-fast: 0.15s ease;
 	--transition-slow: 0.3s ease;
 	--transition-slide: 0.28s cubic-bezier(0.3, 0.7, 0.4, 1); /* 滑块换位，收尾略缓 */
+	--motion-rise: 0.32s cubic-bezier(0.2, 0.7, 0.3, 1); /* 内容进场：淡入并上移一点 */
+	--motion-stagger: 45ms; /* 同一页里相邻两块进场的间隔 */
 
 	/* --- 页头与控件 --- */
 	--control-height: 44px;
@@ -200,6 +205,8 @@
 		--color-gray-700: #bcb7c1;
 
 		--color-canvas: #0f0e11;
+		--color-sidebar: #151318;
+		--color-sidebar-hover: #24212a;
 
 		--color-ok: #4ade80;
 		--color-ok-surface: #12301d;

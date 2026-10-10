@@ -98,6 +98,10 @@ and these blocks:
 | Product links | `ul.products > li > a > b + small` |
 | Segmented control | `.segmented > a[aria-current]`, `> button[aria-pressed]`, or `> label > input[type=radio]` in a form: two to five short exclusive options, equal width, applied on click |
 | Tabs | `.tabset > .segmented > label > input[type=radio]`, then `.panel` × n (up to five; order pairs them) |
+| Glance panel | `section.glance > .glance-bar > .segmented.glance-view + .segmented.glance-range` (radios), then `.glance-pane` × ranges, each holding `.glance-page` × views (up to five of each; order pairs them). A framed panel embedded from another service; no script switches it |
+| Heatmap | `.heat > i[data-level=0–4]`, one column a week with Monday on top; `.out` greys a day outside the chosen range, `.none` marks a day with no record |
+| Breakdown | `ul.breakdown > li.series-N > .swatch + span(name) + small(detail) + b(share)` |
+| Placeholder | `.pending[aria-busy=true] > span × 3–4` where slow content will go; it shows after 0.2 s and hides once a sibling follows it, so the server can stream the page and write the content after it |
 | Code and fields | `pre`, `.row > input + .button` |
 | Buttons | `.button`, `.button.secondary`, `.button.danger`; `.button.compact` sizes one to its content for table rows; `.actions` wraps a lone one |
 | Form fields | `.fields > label.field > span + input\|select` (`.field.wide` spans the row) |
@@ -107,7 +111,12 @@ and these blocks:
 | Chart | `svg.chart` of `rect`s, then `.axis > span × 2`; `.qr` holds an SVG code |
 | Stacked chart | `svg.chart.stacked` of `rect.series-N` (N = 1–6, 6 is「其他」), `ul.legend > li.series-N > .swatch` |
 | Table | `.table-wrap > table.data`, `.num` on number cells, `.share > span` as a share bar (takes `.series-N`) |
-| Sidebar | `.console-shell > nav.console-sidebar + main.console`. The nav holds `input#side-toggle.side-toggle`, then `label.side-bar[for=side-toggle]` (`i.nav-icon.nav-menu`, a `span` naming the current page, `i.nav-icon.nav-chevron`), then `.side-list` with `a` (概览, led by `i.nav-icon.nav-grid`) and `.side-group > span.side-title(i.nav-icon.nav-<icon> + name) + a…`; a link to another site ends with `i.nav-icon.nav-external`; current link `aria-current="page"`, icons `aria-hidden="true"`. Wide screens show the list as a column and hide the bar; narrow screens show the bar and open the list when the box is checked. The top bar's contents then span the shell, and a `.console-footer` goes inside `main`. `.console-shell.wide` widens the shell and the top bar to `--console-wide-width` for a dashboard |
+| Sidebar | `.console-shell > nav.console-sidebar + main.console`. The nav holds `input#side-toggle.side-toggle`, then `label.side-bar[for=side-toggle]` (`i.nav-icon.nav-menu`, a `span` naming the current page, `i.nav-icon.nav-chevron`), then `.side-list` with `a` (概览, led by `i.nav-icon.nav-grid`) and `.side-group > span.side-title(i.nav-icon.nav-<icon> + name) + a…`; a link to another site ends with `i.nav-icon.nav-external`; current link `aria-current="page"`, icons `aria-hidden="true"`. Wide screens show the list as a column and hide the bar; narrow screens show the bar and open the list when the box is checked. On wide screens the sidebar sits against the window's left edge at full height, the top bar's contents span the window, and every page's content container has the same width, so neither the sidebar nor the title moves between pages. A `.console-footer` goes inside `main`. A plain page's content uses `--console-width` at the container's left; `.console-shell.wide` lets a dashboard use the whole container |
+
+Motion: the blocks in `main` fade up one after another on load, and a
+same-origin navigation keeps the top bar and sidebar in place while only
+the content cross-fades (`@view-transition`, Chrome and Safari 18). Both
+are off under `prefers-reduced-motion`.
 
 ## Releases
 
