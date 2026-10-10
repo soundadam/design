@@ -96,13 +96,14 @@ and these blocks:
 | Status | `.pill.ok` / `.warn` / `.bad` / `.muted`; `.dot`, `.dot.on` |
 | Figures | `.tiles` > `.tile[.ok\|.warn\|.bad\|.muted]` > `.label`, `.figure`, `.meter > span`, `.caption`; `.status-line` |
 | Product links | `ul.products > li > a > b + small` |
-| Tabs | `.tabset` > radios, `.tabs` > labels, `.panel` × n (up to four; order pairs them) |
+| Segmented control | `.segmented > a[aria-current]`, `> button[aria-pressed]`, or `> label > input[type=radio]` in a form: two to five short exclusive options, equal width, applied on click |
+| Tabs | `.tabset > .segmented > label > input[type=radio]`, then `.panel` × n (up to five; order pairs them) |
 | Code and fields | `pre`, `.row > input + .button` |
 | Buttons | `.button`, `.button.secondary`, `.button.danger`; `.button.compact` sizes one to its content for table rows; `.actions` wraps a lone one |
 | Form fields | `.fields > label.field > span + input\|select` (`.field.wide` spans the row) |
 | Toggles | `.toggles > label.toggle > input[type=checkbox] + span`: pick several short options inline; `.inline` lines up toggles and buttons |
 | Lists | `ul.list > li` (last child is the muted value), `ul.chips > li` |
-| Choices | `.choices > label.choice > input + span > b + small` |
+| Options | `.options > label.option > input[type=radio] + span > b + small`: exclusive options that need a line of explanation; the checked one carries a checkmark, and the page applies it on change |
 | Chart | `svg.chart` of `rect`s, then `.axis > span × 2`; `.qr` holds an SVG code |
 | Stacked chart | `svg.chart.stacked` of `rect.series-N` (N = 1–6, 6 is「其他」), `ul.legend > li.series-N > .swatch` |
 | Table | `.table-wrap > table.data`, `.num` on number cells, `.share > span` as a share bar (takes `.series-N`) |

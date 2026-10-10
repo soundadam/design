@@ -146,6 +146,8 @@ func TestTextContrast(t *testing.T) {
 		{"color-link", "color-surface"},
 		{"color-link", "color-accent-surface"},
 		{"color-contrast", "color-accent-surface"},
+		{"color-contrast", "color-segment-track"},
+		{"color-contrast", "color-segment-thumb"},
 		{"color-on-cta", "color-cta"},
 		{"color-on-cta", "color-cta-hover"},
 		{"color-ok", "color-ok-surface"},
