@@ -87,7 +87,12 @@ a:hover {
  * </div>
  * 宽屏时是固定在左边的一列：产品是带图标的组标题，页面缩进挂在一条引导线下，
  * 当前页所在产品的图标亮起。窄屏时收成一条「当前位置」按钮，点开是同样分组
- * 的列表（复选框切换，不需要脚本）。<i> 图标都加 aria-hidden="true"。 */
+ * 的列表（复选框切换，不需要脚本）。<i> 图标都加 aria-hidden="true"。
+ * 仪表盘一类要横向空间的页写 <div class="console-shell wide">：正文和页头一起放宽。 */
+:root:has(.console-shell.wide) {
+	--console-width: var(--console-wide-width);
+}
+
 .console-shell {
 	max-width: calc(var(--console-sidebar-width) + var(--space-40) + var(--console-width) + 2 * var(--space-30));
 	margin: 0 auto;
@@ -546,63 +551,154 @@ h2 {
 	font-size: var(--text-xs);
 }
 
-/* --- 标签页：纯 CSS，单选框 + label，最多四页 ---
- * <div class="tabset">
- *   <input type="radio" name="t" id="t-a" checked><input type="radio" name="t" id="t-b">
- *   <div class="tabs"><label for="t-a">A</label><label for="t-b">B</label></div>
- *   <div class="panel">…</div><div class="panel">…</div>
- * </div>
- * 第 n 个单选框对应第 n 个 label 与第 n 个 .panel。 */
-.tabset > input[type="radio"] {
+/* --- 分段控件：二到五个互斥的短选项，点了就生效 ---
+ * <nav class="segmented"><a href="…" aria-current="true">7 天</a><a href="…">30 天</a></nav>
+ * 子元素是链接（当前那个带 aria-current）、按钮（选中的 aria-pressed="true"），
+ * 或表单里的 <label><input type="radio" name="…" value="…">1 天</label>。
+ * 各段等宽，宽度跟最长的一段走；滑块按选中的序号滑过去，字只加一档字重。 */
+.segmented {
+	--segment-count: 2;
+	--segment-index: 0;
+	position: relative;
+	isolation: isolate;
+	display: inline-grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	max-width: 100%;
+	padding: 2px;
+	border-radius: var(--radius-md);
+	background: var(--color-segment-track);
+	font-size: var(--text-xs);
+	vertical-align: middle;
+}
+
+.segmented::before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	top: 2px;
+	bottom: 2px;
+	left: 2px;
+	width: calc((100% - 4px) / var(--segment-count));
+	border-radius: calc(var(--radius-md) - 2px);
+	background: var(--color-segment-thumb);
+	box-shadow: var(--shadow-thumb);
+	transform: translateX(calc(100% * var(--segment-index)));
+	transition: transform var(--transition-slide);
+}
+
+.segmented > * {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 0;
+	min-height: 28px;
+	padding: 0 var(--space-30);
+	border: 0;
+	border-radius: calc(var(--radius-md) - 2px);
+	background: none;
+	color: var(--color-contrast);
+	font: inherit;
+	font-weight: 400;
+	line-height: 1.2;
+	text-align: center;
+	word-break: keep-all;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.segmented > :hover {
+	color: var(--color-contrast);
+}
+
+.segmented > label > input {
 	position: absolute;
 	opacity: 0;
 	pointer-events: none;
 }
 
-.tabs {
-	display: flex;
-	gap: var(--space-10);
-	background: var(--color-surface-muted);
-	border-radius: var(--radius-md);
-	padding: 4px;
-	margin-bottom: var(--space-20);
+/* 未选的两段之间一条细线；挨着滑块的线收起来。 */
+.segmented > * + *::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 25%;
+	bottom: 25%;
+	width: 1px;
+	background: var(--color-gray-400);
+	transition: opacity var(--transition-fast);
 }
 
-.tabs label {
-	flex: 1;
-	text-align: center;
-	padding: var(--space-10);
-	border-radius: var(--radius-sm);
-	cursor: pointer;
-	color: var(--color-muted);
+.segmented > :is([aria-current], [aria-pressed="true"], :has(> input:checked)) {
 	font-weight: 600;
-	font-size: var(--text-xs);
+}
+
+.segmented > :is([aria-current], [aria-pressed="true"], :has(> input:checked))::before,
+.segmented > :is([aria-current], [aria-pressed="true"], :has(> input:checked)) + *::before {
+	opacity: 0;
+}
+
+.segmented > :focus-visible,
+.segmented > :has(> input:focus-visible) {
+	outline: 2px solid var(--color-accent-marker);
+	outline-offset: -2px;
+}
+
+.segmented:has(> :nth-child(3):last-child) {
+	--segment-count: 3;
+}
+
+.segmented:has(> :nth-child(4):last-child) {
+	--segment-count: 4;
+}
+
+.segmented:has(> :nth-child(5):last-child) {
+	--segment-count: 5;
+}
+
+.segmented:has(> :nth-child(2):is([aria-current], [aria-pressed="true"]), > :nth-child(2) > input:checked) {
+	--segment-index: 1;
+}
+
+.segmented:has(> :nth-child(3):is([aria-current], [aria-pressed="true"]), > :nth-child(3) > input:checked) {
+	--segment-index: 2;
+}
+
+.segmented:has(> :nth-child(4):is([aria-current], [aria-pressed="true"]), > :nth-child(4) > input:checked) {
+	--segment-index: 3;
+}
+
+.segmented:has(> :nth-child(5):is([aria-current], [aria-pressed="true"]), > :nth-child(5) > input:checked) {
+	--segment-index: 4;
+}
+
+/* 窄屏放不下时段内折行，各段仍等宽。 */
+@media (max-width: 600px) {
+	.segmented > * {
+		padding: var(--space-10);
+	}
+}
+
+/* --- 标签页：分段控件切换下面的面板，纯 CSS ---
+ * <div class="tabset">
+ *   <div class="segmented"><label><input type="radio" name="t" checked>A</label><label><input type="radio" name="t">B</label></div>
+ *   <div class="panel">…</div><div class="panel">…</div>
+ * </div>
+ * 第 n 段对应第 n 个 .panel，最多五页。 */
+.tabset > .segmented {
+	margin-bottom: var(--space-20);
 }
 
 .tabset > .panel {
 	display: none;
 }
 
-.tabset > input:nth-of-type(1):checked ~ .tabs label:nth-of-type(1),
-.tabset > input:nth-of-type(2):checked ~ .tabs label:nth-of-type(2),
-.tabset > input:nth-of-type(3):checked ~ .tabs label:nth-of-type(3),
-.tabset > input:nth-of-type(4):checked ~ .tabs label:nth-of-type(4) {
-	background: var(--color-surface);
-	color: var(--color-contrast);
-	box-shadow: var(--shadow-sm);
-}
-
-.tabset > input:nth-of-type(1):focus-visible ~ .tabs label:nth-of-type(1),
-.tabset > input:nth-of-type(2):focus-visible ~ .tabs label:nth-of-type(2),
-.tabset > input:nth-of-type(3):focus-visible ~ .tabs label:nth-of-type(3),
-.tabset > input:nth-of-type(4):focus-visible ~ .tabs label:nth-of-type(4) {
-	outline: 2px solid var(--color-accent-marker);
-}
-
-.tabset > input:nth-of-type(1):checked ~ .panel:nth-child(1 of .panel),
-.tabset > input:nth-of-type(2):checked ~ .panel:nth-child(2 of .panel),
-.tabset > input:nth-of-type(3):checked ~ .panel:nth-child(3 of .panel),
-.tabset > input:nth-of-type(4):checked ~ .panel:nth-child(4 of .panel) {
+.tabset:has(> .segmented > :nth-child(1) > input:checked) > .panel:nth-child(1 of .panel),
+.tabset:has(> .segmented > :nth-child(2) > input:checked) > .panel:nth-child(2 of .panel),
+.tabset:has(> .segmented > :nth-child(3) > input:checked) > .panel:nth-child(3 of .panel),
+.tabset:has(> .segmented > :nth-child(4) > input:checked) > .panel:nth-child(4 of .panel),
+.tabset:has(> .segmented > :nth-child(5) > input:checked) > .panel:nth-child(5 of .panel) {
 	display: block;
 }
 
@@ -768,39 +864,70 @@ pre {
 	background: var(--color-ok);
 }
 
-/* --- 单选卡片 --- */
-.choices {
-	display: grid;
-	gap: var(--space-10);
+/* --- 选项列表：一组带说明的互斥选项，当前那项右边一个对勾 ---
+ * <div class="options"><label class="option"><input type="radio" name="…" checked><span><b>名称</b><small>说明</small></span></label>…</div>
+ * 点了就生效：页面在 change 时提交，不另放确认按钮。 */
+.options {
+	border-radius: var(--radius-lg);
+	background: var(--color-surface-muted);
+	overflow: hidden;
 }
 
-.choice {
+.option {
+	position: relative;
 	display: flex;
-	gap: var(--space-20);
-	align-items: flex-start;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-30);
 	padding: var(--space-20) var(--space-30);
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-lg);
 	cursor: pointer;
 }
 
-.choice:has(input:checked) {
-	border-color: var(--color-accent-marker);
-	background: var(--color-accent-surface);
+.option + .option::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: var(--space-30);
+	right: 0;
+	border-top: 1px solid var(--color-border);
 }
 
-.choice input {
-	margin-top: 0.35rem;
-	accent-color: var(--color-cta);
+.option input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
 }
 
-.choice b {
+.option b {
 	display: block;
+	font-weight: 500;
 }
 
-.choice small {
+.option small {
+	display: block;
 	color: var(--color-muted);
 	font-size: var(--text-xs);
+}
+
+.option::after {
+	content: "";
+	flex: none;
+	width: 0.35rem;
+	height: 0.7rem;
+	margin: 0 0.25rem 0.2rem 0;
+	border: solid var(--color-link);
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+	visibility: hidden;
+}
+
+.option:has(input:checked)::after {
+	visibility: visible;
+}
+
+.option:has(input:focus-visible) {
+	outline: 2px solid var(--color-accent-marker);
+	outline-offset: -2px;
 }
 
 /* --- 表单字段：<div class="fields"><label class="field"><span>名称</span><input>…</label>…</div>
