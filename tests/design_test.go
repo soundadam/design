@@ -143,6 +143,11 @@ func TestTextContrast(t *testing.T) {
 		{"color-muted", "color-surface"},
 		{"color-muted", "color-surface-muted"},
 		{"color-muted", "color-canvas"},
+		// The console sidebar and a link hovered in it.
+		{"color-contrast", "color-sidebar"},
+		{"color-muted", "color-sidebar"},
+		{"color-contrast", "color-sidebar-hover"},
+		{"color-muted", "color-sidebar-hover"},
 		{"color-link", "color-surface"},
 		{"color-link", "color-accent-surface"},
 		{"color-contrast", "color-accent-surface"},

@@ -85,18 +85,13 @@ a:hover {
  *   </nav>
  *   <main class="console">…</main>
  * </div>
- * 宽屏时是固定在左边的一列：产品是带图标的组标题，页面缩进挂在一条引导线下，
- * 当前页所在产品的图标亮起。窄屏时收成一条「当前位置」按钮，点开是同样分组
- * 的列表（复选框切换，不需要脚本）。<i> 图标都加 aria-hidden="true"。
- * 仪表盘一类要横向空间的页写 <div class="console-shell wide">：正文和页头一起放宽。 */
-:root:has(.console-shell.wide) {
-	--console-width: var(--console-wide-width);
-}
-
-.console-shell {
-	max-width: calc(var(--console-sidebar-width) + var(--space-40) + var(--console-width) + 2 * var(--space-30));
-	margin: 0 auto;
-}
+ * 宽屏时侧栏贴着窗口左边，从页头下面一直铺到窗口底，自己一层底色、右边一条
+ * 细线：产品是带图标的组标题，页面缩进挂在一条引导线下，当前页所在产品的图标
+ * 亮起。窄屏时收成一条「当前位置」按钮，点开是同样分组的列表（复选框切换，不
+ * 需要脚本）。<i> 图标都加 aria-hidden="true"。
+ * 正文在侧栏右边余下的宽度里居中，每一页的容器一样宽，所以换页时侧栏和标题都
+ * 不挪位置。普通页的内容只用容器左边 --console-width 那么宽；仪表盘一类要横向
+ * 空间的页写 <div class="console-shell wide">，内容用满容器。 */
 
 .nav-icon {
 	flex: none;
@@ -296,19 +291,19 @@ a:hover {
 	.console-shell {
 		display: grid;
 		grid-template-columns: var(--console-sidebar-width) minmax(0, 1fr);
-		gap: var(--space-40);
-		padding-inline: var(--space-30);
+		min-height: calc(100vh - var(--header-height));
 	}
 
-	/* 链接的底色向左伸出，图标与页头 logo 对齐。 */
+	/* 链接的图标与页头 logo 对齐：侧栏内边距加链接内边距等于页头的内边距。 */
 	.console-sidebar {
 		align-self: start;
 		position: sticky;
 		top: var(--header-height);
-		max-height: calc(100vh - var(--header-height));
+		height: calc(100vh - var(--header-height));
 		overflow-y: auto;
-		margin-left: calc(-1 * var(--space-20));
-		padding: var(--space-30) 0;
+		padding: var(--space-30) var(--space-20);
+		background: var(--color-sidebar);
+		border-right: 1px solid var(--color-border);
 	}
 
 	.side-bar {
@@ -324,19 +319,30 @@ a:hover {
 		box-shadow: none;
 	}
 
+	.side-list a:hover {
+		background: var(--color-sidebar-hover);
+	}
+
 	.console-shell > .console {
-		margin: 0;
-		padding-inline: 0;
+		width: 100%;
+		max-width: calc(var(--console-wide-width) + 2 * var(--space-50));
+		margin: 0 auto;
+		padding: var(--space-40) var(--space-50) 0;
+	}
+
+	.console-shell:not(.wide) > .console > * {
+		max-width: var(--console-width);
 	}
 
 	.site-bar:has(+ .console-shell) .site-header-inner {
-		max-width: calc(var(--console-sidebar-width) + var(--space-40) + var(--console-width) + 2 * var(--space-30));
+		max-width: none;
 		padding-inline: var(--space-30);
 	}
 }
 
-/* 页脚放在正文 main 里时跟着正文列走。 */
+/* 页脚放在正文 main 里时跟着正文列走，靠左对齐正文。 */
 .console > .console-footer {
+	margin-inline: 0;
 	padding-inline: 0;
 }
 
@@ -346,6 +352,13 @@ a:hover {
 	margin: 0 auto;
 	/* 与页脚的间距由最后一张卡片的 margin 提供。 */
 	padding: var(--space-30) var(--space-30) 0;
+}
+
+/* 窄屏没有侧栏，宽页照样比单栏宽；宽屏的容器在上面的 900px 一节里，每页一样。 */
+@media (max-width: 899px) {
+	.console-shell.wide > .console {
+		max-width: var(--console-wide-width);
+	}
 }
 
 /* 负字距只收紧拉丁字母，汉字挤在一起反而难看，所以标题不收字距。 */
@@ -700,6 +713,187 @@ h2 {
 .tabset:has(> .segmented > :nth-child(4) > input:checked) > .panel:nth-child(4 of .panel),
 .tabset:has(> .segmented > :nth-child(5) > input:checked) > .panel:nth-child(5 of .panel) {
 	display: block;
+}
+
+/* --- 一览：一块框起来的小面板，左边切视图、右边切时间 ---
+ * <section class="glance" aria-label="…">
+ *   <div class="glance-bar">
+ *     <div class="segmented glance-view"><label><input type="radio" name="gv" checked>概览</label><label><input type="radio" name="gv">模型</label></div>
+ *     <div class="segmented glance-range"><label><input type="radio" name="gr">7 天</label><label><input type="radio" name="gr" checked>30 天</label></div>
+ *   </div>
+ *   <div class="glance-pane">                      第 n 个对应 .glance-range 的第 n 段
+ *     <div class="glance-page">…</div>…             第 m 个对应 .glance-view 的第 m 段
+ *   </div>…
+ * </section>
+ * 视图和时间各最多五段，切换不用脚本。页里放 .tiles、.heat、svg.chart.stacked、
+ * .breakdown。控制台各节不加框，这块是例外：它是从别处嵌进来的一张小卡片。 */
+.glance {
+	margin-bottom: var(--space-40);
+	padding: var(--space-20) var(--space-30) var(--space-30);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	background: var(--color-surface);
+}
+
+.glance-bar {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: var(--space-10);
+	margin-bottom: var(--space-30);
+}
+
+.glance-pane,
+.glance-page {
+	display: none;
+}
+
+.glance:has(.glance-range > :nth-child(1) > input:checked) > .glance-pane:nth-child(1 of .glance-pane),
+.glance:has(.glance-range > :nth-child(2) > input:checked) > .glance-pane:nth-child(2 of .glance-pane),
+.glance:has(.glance-range > :nth-child(3) > input:checked) > .glance-pane:nth-child(3 of .glance-pane),
+.glance:has(.glance-range > :nth-child(4) > input:checked) > .glance-pane:nth-child(4 of .glance-pane),
+.glance:has(.glance-range > :nth-child(5) > input:checked) > .glance-pane:nth-child(5 of .glance-pane),
+.glance:has(.glance-view > :nth-child(1) > input:checked) .glance-page:nth-child(1 of .glance-page),
+.glance:has(.glance-view > :nth-child(2) > input:checked) .glance-page:nth-child(2 of .glance-page),
+.glance:has(.glance-view > :nth-child(3) > input:checked) .glance-page:nth-child(3 of .glance-page),
+.glance:has(.glance-view > :nth-child(4) > input:checked) .glance-page:nth-child(4 of .glance-page),
+.glance:has(.glance-view > :nth-child(5) > input:checked) .glance-page:nth-child(5 of .glance-page) {
+	display: block;
+}
+
+/* 面板里的数字块小一号，三个一排。 */
+.glance .tiles {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--space-10);
+}
+
+.glance .tile {
+	border-radius: var(--radius-md);
+	padding: var(--space-10) var(--space-20);
+}
+
+.glance .tile .figure {
+	margin: 2px 0 0;
+	font-size: var(--text-sm);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.glance .chart {
+	height: 9rem;
+	margin-top: var(--space-10);
+}
+
+.glance .hint {
+	margin-top: var(--space-20);
+}
+
+.glance .hint a {
+	white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+	.glance {
+		padding-inline: var(--space-20);
+	}
+
+	.glance .tiles {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+/* 活跃度：一列一周、一行一天（周一在上），格子的深浅是那天用量所在的档。
+ * <div class="heat"><i data-level="0..4" title="…"></i>…</div>；
+ * 格子是正方形，列数决定大小；时间范围外的日子加 .out 褪成灰色，没有记录的日子
+ * （早于保留期）写 <i class="none">，比用量为零的格子再淡一点。 */
+.heat {
+	display: grid;
+	grid-template-rows: repeat(7, auto);
+	grid-auto-flow: column;
+	grid-auto-columns: minmax(0, 1fr);
+	gap: 3px;
+	margin-top: var(--space-20);
+}
+
+.heat i {
+	aspect-ratio: 1;
+	border-radius: 3px;
+	background: var(--color-surface-muted);
+}
+
+.heat i[data-level] {
+	background: var(--color-heat);
+}
+
+.heat i[data-level="0"] {
+	background: var(--color-surface-muted);
+}
+
+.heat i[data-level="1"] {
+	opacity: 0.3;
+}
+
+.heat i[data-level="2"] {
+	opacity: 0.5;
+}
+
+.heat i[data-level="3"] {
+	opacity: 0.75;
+}
+
+.heat i.out {
+	filter: grayscale(1);
+}
+
+.heat i.none {
+	opacity: 0.5;
+}
+
+/* 分项：一行一项，色块、名字、细节、占比。
+ * <ul class="breakdown"><li class="series-1"><span class="swatch"></span><span>名字</span><small>细节</small><b>63%</b></li></ul> */
+.breakdown {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto auto;
+	gap: var(--space-10) var(--space-20);
+	align-items: center;
+	margin: var(--space-20) 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--text-xs);
+	font-variant-numeric: tabular-nums;
+}
+
+.breakdown li {
+	display: contents;
+}
+
+.breakdown span:not(.swatch) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.breakdown small {
+	color: var(--color-muted);
+	font-size: inherit;
+	white-space: nowrap;
+}
+
+.breakdown b {
+	min-width: 3.5em;
+	font-weight: 500;
+	text-align: right;
+}
+
+@media (max-width: 600px) {
+	.breakdown {
+		grid-template-columns: auto minmax(0, 1fr) auto;
+	}
+
+	.breakdown small {
+		display: none;
+	}
 }
 
 /* --- 代码与输入 --- */
@@ -1187,10 +1381,99 @@ summary {
 	margin: var(--space-10) 0;
 }
 
+/* --- 进场：页头和侧栏先画好、不动，正文由上到下一块块浮现 ---
+ * 正文 main 的每个直接子元素错开 --motion-stagger 淡入上移；只在打开页面时
+ * 动一次。同源换页时（Chrome、Safari 18）页头和侧栏原样留着，只有正文淡出
+ * 淡入，侧栏里高亮的那一项跟着换过去。 */
+@keyframes console-rise {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+}
+
+.console > * {
+	animation: console-rise var(--motion-rise) backwards;
+}
+
+.console > :nth-child(2) { animation-delay: var(--motion-stagger); }
+.console > :nth-child(3) { animation-delay: calc(2 * var(--motion-stagger)); }
+.console > :nth-child(4) { animation-delay: calc(3 * var(--motion-stagger)); }
+.console > :nth-child(n + 5) { animation-delay: calc(4 * var(--motion-stagger)); }
+
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+}
+
+.site-bar:has(+ .console-shell) {
+	view-transition-name: site-bar;
+}
+
+.console-sidebar {
+	view-transition-name: console-sidebar;
+}
+
+::view-transition-group(*) {
+	animation-duration: 0.2s;
+}
+
+/* --- 占位：慢的内容还在路上 ---
+ * 服务端先把页头、侧栏、标题和一个占位发出去，再去读慢的数据，读完把内容接着
+ * 写在占位后面、同一个父元素里：
+ * <main class="console"><h1>…</h1>
+ *   <div class="pending" aria-busy="true"><span></span><span></span><span></span><span></span></div>
+ *   …稍后才到的内容…</main>
+ * 内容一到，占位后面有了兄弟元素，自己收起；内容按进场的样子浮现。占位
+ * 晚 0.2 秒才显出来，快的页面不会闪一下。第四条起是图表高度的大块。用脚本取
+ * 内容的页面，同样把内容插到占位后面。 */
+.pending {
+	display: grid;
+	gap: var(--space-20);
+	padding: var(--space-10) 0;
+	animation: console-rise var(--motion-rise) 0.2s backwards;
+}
+
+/* :last-child 在父元素解析完之前不算数（Blink），所以看后面有没有兄弟。 */
+.pending:has(~ *) {
+	display: none;
+}
+
+.pending > span {
+	height: 0.9rem;
+	border-radius: var(--radius-sm);
+	background: linear-gradient(90deg, var(--color-surface-muted) 30%, var(--color-border) 50%, var(--color-surface-muted) 70%) 0 0 / 300% 100%;
+	animation: pending-shimmer 1.4s linear infinite;
+}
+
+.pending > span:first-child {
+	width: 40%;
+}
+
+.pending > span:nth-child(n + 4) {
+	height: 7rem;
+}
+
+@keyframes pending-shimmer {
+	from {
+		background-position: 100% 0;
+	}
+
+	to {
+		background-position: 0 0;
+	}
+}
+
+.pending ~ * {
+	animation: console-rise var(--motion-rise) backwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	*,
 	*::before,
 	*::after {
 		transition: none !important;
+		animation: none !important;
 	}
 }
