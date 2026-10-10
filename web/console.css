@@ -87,7 +87,12 @@ a:hover {
  * </div>
  * 宽屏时是固定在左边的一列：产品是带图标的组标题，页面缩进挂在一条引导线下，
  * 当前页所在产品的图标亮起。窄屏时收成一条「当前位置」按钮，点开是同样分组
- * 的列表（复选框切换，不需要脚本）。<i> 图标都加 aria-hidden="true"。 */
+ * 的列表（复选框切换，不需要脚本）。<i> 图标都加 aria-hidden="true"。
+ * 仪表盘一类要横向空间的页写 <div class="console-shell wide">：正文和页头一起放宽。 */
+:root:has(.console-shell.wide) {
+	--console-width: var(--console-wide-width);
+}
+
 .console-shell {
 	max-width: calc(var(--console-sidebar-width) + var(--space-40) + var(--console-width) + 2 * var(--space-30));
 	margin: 0 auto;
