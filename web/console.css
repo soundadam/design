@@ -1368,6 +1368,195 @@ summary {
 	border-radius: var(--radius-pill);
 }
 
+/* --- 账目表：报表式的 .data，一格一个数 ---
+ * <div class="table-wrap"><table class="data ledger">
+ *   <thead><tr><th>组织</th><th class="num">花费 USD</th><th class="num">较上期</th></tr></thead>
+ *   <tbody>                                                        一组一个 tbody
+ *     <tr class="group"><th scope="rowgroup"><a href="…">aalab</a></th><td class="num">120.00</td>…</tr>
+ *     <tr><th scope="row"><a href="…">alice</a></th><td class="num">80.00</td><td class="num zero">—</td></tr>
+ *   </tbody>…
+ *   <tfoot><tr class="total"><th scope="row">合计</th><td class="num">…</td>…</tr></tfoot>
+ * </table></div>
+ * 单位写在表头，格里只写数，零写 —（.zero）。组行是组名和小计，组里的行缩进一档；
+ * 合计行上面一道细线、下面一道双线。颜色只给有含义的格：.bad 超出、.warn 将满。
+ * 行首的链接往下一层看；要勾选的表在行首加 td.pick > input[type=checkbox]，
+ * 配 .selection-bar。 */
+.ledger thead th {
+	border-bottom: 1px solid var(--color-contrast);
+}
+
+.ledger tbody th,
+.ledger tfoot th {
+	color: var(--color-contrast);
+	font-size: inherit;
+	font-weight: 400;
+	padding: var(--space-10);
+	white-space: normal;
+}
+
+.ledger tbody > tr > *,
+.ledger tfoot > tr > * {
+	border-top: 1px solid var(--color-border);
+}
+
+.ledger thead + tbody > tr:first-child > * {
+	border-top: 0;
+}
+
+.ledger th a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.ledger th a:hover {
+	color: var(--color-link);
+	text-decoration: underline;
+}
+
+.ledger tbody > tr:has(th a):hover > * {
+	background: var(--color-surface-muted);
+}
+
+.ledger tr.group > * {
+	padding-top: var(--space-20);
+	font-weight: 600;
+}
+
+.ledger tr.group ~ tr > th[scope="row"] {
+	padding-left: calc(var(--space-10) + var(--space-30));
+}
+
+.ledger tr.total > * {
+	font-weight: 600;
+	border-top: 1px solid var(--color-contrast);
+	border-bottom: 3px double var(--color-contrast);
+}
+
+.ledger .zero {
+	color: var(--color-muted);
+}
+
+.ledger .warn {
+	color: var(--color-warn);
+}
+
+.ledger .bad {
+	color: var(--color-bad);
+}
+
+.ledger .pick {
+	width: 1px;
+	padding-right: 0;
+}
+
+.ledger .pick input {
+	display: block;
+	margin: 0;
+	accent-color: var(--color-cta);
+}
+
+/* --- 勾选操作栏：表里勾了行才出现，贴在视口底部 ---
+ * <form class="picking" method="post" action="…">
+ *   <div class="table-wrap"><table class="data ledger">…<td class="pick"><input type="checkbox" name="…" value="…"></td>…</table></div>
+ *   <div class="selection-bar"><span class="picked">已选 <b class="count"></b> 人</span>
+ *     <label><span>每周 USD</span><input type="number" …></label>
+ *     <button class="button compact" …>…</button>…</div>
+ * </form>
+ * 没勾任何行时整条不显示；勾了几行由 CSS 计数，不用脚本，只数 tbody 里的勾，表头的全选不算。 */
+.picking {
+	counter-reset: picked;
+}
+
+.picking tbody input[type="checkbox"]:checked {
+	counter-increment: picked;
+}
+
+.selection-bar {
+	display: none;
+	position: sticky;
+	bottom: var(--space-20);
+	z-index: 1;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-10) var(--space-20);
+	margin-top: var(--space-20);
+	padding: var(--space-20) var(--space-30);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	background: var(--color-surface);
+	box-shadow: var(--shadow-lg);
+	font-size: var(--text-xs);
+}
+
+.picking:has(tbody input[type="checkbox"]:checked) .selection-bar {
+	display: flex;
+	animation: console-rise var(--motion-rise) backwards;
+}
+
+.selection-bar .picked {
+	margin-right: auto;
+	color: var(--color-muted);
+}
+
+.selection-bar .count {
+	color: var(--color-contrast);
+	font-variant-numeric: tabular-nums;
+}
+
+.selection-bar .count::before {
+	content: counter(picked);
+}
+
+.selection-bar label {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-10);
+	color: var(--color-muted);
+}
+
+.selection-bar input:not([type="checkbox"], [type="radio"]),
+.selection-bar select {
+	width: 6rem;
+	min-height: 28px;
+	padding: 0 var(--space-10);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	color: var(--color-contrast);
+	font: inherit;
+}
+
+/* --- 位置：标题上面一行，从上一层到这一页 ---
+ * <nav class="crumbs" aria-label="位置"><a href="…">用量</a><a href="…">aalab</a><span aria-current="page">alice</span></nav> */
+.crumbs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 var(--space-10);
+	margin: 0 0 var(--space-10);
+	color: var(--color-muted);
+	font-size: var(--text-xs);
+}
+
+.crumbs > * + *::before {
+	content: "/";
+	margin-right: var(--space-10);
+	color: var(--color-muted);
+}
+
+.crumbs a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.crumbs a:hover {
+	color: var(--color-link);
+	text-decoration: underline;
+}
+
+.crumbs [aria-current] {
+	color: var(--color-contrast);
+}
+
 /* --- 页脚 --- */
 .console-footer {
 	max-width: var(--console-width);
