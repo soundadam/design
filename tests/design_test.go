@@ -161,10 +161,13 @@ func TestTextContrast(t *testing.T) {
 		{"color-ok", "color-surface-muted"},
 		{"color-warn", "color-surface-muted"},
 		{"color-bad", "color-surface-muted"},
+		// A ledger row under the pointer; its header link turns link-coloured.
+		{"color-link", "color-surface-muted"},
 		{"color-bad", "color-surface"},
 		// Sections sit on the page background, so their text does too.
 		{"color-link", "color-canvas"},
 		{"color-bad", "color-canvas"},
+		{"color-warn", "color-canvas"},
 		// The shared top bar and its open panels (header.css).
 		{"color-panel-text", "color-panel"},
 		{"color-panel-muted", "color-panel"},
