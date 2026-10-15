@@ -30,7 +30,10 @@ runtime.
 ## Dark mode
 
 A page opts in with `<html data-theme="auto">` and then follows the system
-setting. A page without the attribute stays light.
+setting. `<html data-theme="dark">` is dark whatever the system says, with
+the same values (a second copy of the dark block, held equal by the tests),
+for a page that lets the reader pick. A page without the attribute, or with
+`data-theme="light"`, stays light.
 
 ## Top bar
 

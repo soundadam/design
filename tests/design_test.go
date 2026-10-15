@@ -36,7 +36,8 @@ func read(t *testing.T, name string) string {
 }
 
 // themes returns the light declarations (the first :root block) and the
-// dark overrides (the block inside the prefers-color-scheme query).
+// dark overrides (the block inside the prefers-color-scheme query and its
+// copy for data-theme="dark", which TestForcedDarkMatchesSystemDark holds equal).
 func themes(t *testing.T) (light, dark map[string]string) {
 	t.Helper()
 	css := read(t, "tokens.css")
@@ -52,6 +53,41 @@ func themes(t *testing.T) (light, dark map[string]string) {
 		return out
 	}
 	return parse(css[:split]), parse(css[split:])
+}
+
+// A page that forces dark (data-theme="dark") gets the same values as one
+// that follows a dark system (data-theme="auto"): two copies of one block.
+func TestForcedDarkMatchesSystemDark(t *testing.T) {
+	css := read(t, "tokens.css")
+	media := strings.Index(css, "@media (prefers-color-scheme: dark)")
+	forced := strings.Index(css, `:root[data-theme="dark"]`)
+	if media < 0 || forced < media {
+		t.Fatal(`tokens.css needs the dark @media block, then :root[data-theme="dark"]`)
+	}
+	parse := func(block string) map[string]string {
+		out := map[string]string{}
+		for _, m := range declaration.FindAllStringSubmatch(block, -1) {
+			out[m[1]] = strings.Join(strings.Fields(m[2]), " ")
+		}
+		return out
+	}
+	system, always := parse(css[media:forced]), parse(css[forced:])
+	if len(system) == 0 {
+		t.Fatal("the dark @media block declares nothing")
+	}
+	for name, value := range system {
+		if always[name] != value {
+			t.Errorf(`--%s is %q under the system's dark mode but %q under data-theme="dark"`, name, value, always[name])
+		}
+	}
+	for name := range always {
+		if _, ok := system[name]; !ok {
+			t.Errorf(`data-theme="dark" sets --%s, which the dark @media block does not`, name)
+		}
+	}
+	if !strings.Contains(css[forced:], "color-scheme: dark") {
+		t.Error(`data-theme="dark" must set color-scheme: dark, as the @media block does`)
+	}
 }
 
 func stylesheets(t *testing.T) []string {

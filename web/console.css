@@ -5,7 +5,7 @@
  * 次要按钮）。
  *
  * 依赖 fonts.css、tokens.css、header.css 先加载。这里只写组件，值一律引用 token。
- * 页面在 <html> 上写 data-theme="auto"，跟随系统切换暗色。
+ * 页面在 <html> 上写 data-theme="auto"，跟随系统切换暗色；写 "dark" 或 "light" 固定一种。
  * 标记结构见 README.md 的「控制台」一节。
  */
 
