@@ -160,7 +160,7 @@
 }
 
 .site-header-language a,
-.site-header-account {
+.site-header-account > summary {
 	color: var(--color-panel-muted);
 	font-size: var(--text-xs);
 	white-space: nowrap;
@@ -178,21 +178,133 @@
 	text-decoration: underline;
 }
 
+/* 账号：<details class="site-header-account">，<summary> 是名字，点开是
+ * .account-card。卡片铺页面底色而不是栏的深色，里面放的是控制台组件
+ * （主题的 .segmented、链接），跟着页面的亮暗走。 */
 .site-header-account {
+	position: relative;
+	min-width: 0;
+}
+
+.site-header-account > summary {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--space-10);
-	min-width: 0;
+	max-width: 16rem;
+	min-height: var(--control-height);
+	list-style: none;
+	cursor: pointer;
+	color: var(--color-panel-text);
+}
+
+.site-header-account > summary::-webkit-details-marker {
+	display: none;
+}
+
+.site-header-account > summary > span {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.site-header-account a {
-	color: var(--color-panel-text);
+.site-header-account > summary::after {
+	content: "";
+	flex-shrink: 0;
+	width: 6px;
+	height: 6px;
+	border-right: 1.5px solid currentColor;
+	border-bottom: 1.5px solid currentColor;
+	transform: translateY(-2px) rotate(45deg);
+	transition: transform var(--transition-fast);
 }
 
-.site-header-account a:hover {
+.site-header-account[open] > summary::after {
+	transform: translateY(1px) rotate(-135deg);
+}
+
+.site-header-account > summary:hover {
 	color: var(--color-panel-accent);
+}
+
+.account-card {
+	position: absolute;
+	right: 0;
+	top: calc(100% + var(--space-10));
+	z-index: 1;
+	width: min(18rem, calc(100vw - 2 * var(--gutter)));
+	padding: var(--space-30);
+	background: var(--color-surface);
+	color: var(--color-contrast);
+	border: var(--border-hairline);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-lg);
+	font-size: var(--text-xs);
+	white-space: normal;
+}
+
+.account-card a {
+	color: var(--color-link);
+}
+
+.account-card a:hover {
+	color: var(--color-link-hover);
+}
+
+.account-card > p {
+	margin: 0;
+}
+
+.account-who b {
+	display: block;
+	font-size: var(--text-sm);
+	overflow-wrap: anywhere;
+}
+
+.account-who span,
+.account-card dd {
+	color: var(--color-muted);
+	font-family: var(--font-mono);
+	font-size: var(--text-2xs);
+}
+
+.account-card dl {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: var(--space-10) var(--space-20);
+	margin: var(--space-20) 0 0;
+	padding-top: var(--space-20);
+	border-top: var(--border-hairline);
+}
+
+.account-card dt {
+	color: var(--color-muted);
+}
+
+.account-card dd {
+	margin: 0;
+	text-align: right;
+	color: var(--color-contrast);
+}
+
+.account-card .account-label {
+	margin: var(--space-20) 0 var(--space-10);
+	padding-top: var(--space-20);
+	border-top: var(--border-hairline);
+	color: var(--color-muted);
+	font-size: var(--text-2xs);
+}
+
+.account-card .segmented {
+	display: grid;
+	width: 100%;
+}
+
+.account-card .account-links {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--space-20);
+	margin-top: var(--space-20);
+	padding-top: var(--space-20);
+	border-top: var(--border-hairline);
 }
 
 .site-bar :focus-visible {

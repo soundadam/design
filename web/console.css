@@ -117,6 +117,11 @@ a:hover {
 	mask-image: url("nav-globe.svg");
 }
 
+.nav-wave {
+	-webkit-mask-image: url("nav-wave.svg");
+	mask-image: url("nav-wave.svg");
+}
+
 .nav-menu {
 	-webkit-mask-image: url("nav-menu.svg");
 	mask-image: url("nav-menu.svg");
@@ -367,6 +372,11 @@ a:hover {
 	font-weight: 600;
 	line-height: var(--leading-snug);
 	margin: 0 0 var(--space-30);
+}
+
+/* 标题下的一排页签是这一页的几个子页，和下面的内容隔开一档。 */
+.console > h1 + .segmented {
+	margin-bottom: var(--space-10);
 }
 
 /* 一节是标题加内容，节与节之间一条细线，没有卡片框。 */
@@ -1444,6 +1454,14 @@ summary {
 	color: var(--color-bad);
 }
 
+/* 数一律等宽，列里的小数点对得齐；key、地址、模型名写成 <code>，也是等宽。 */
+.ledger .num,
+.mono {
+	font-family: var(--font-mono);
+	font-size: var(--text-2xs);
+	font-variant-numeric: tabular-nums;
+}
+
 .ledger .pick {
 	width: 1px;
 	padding-right: 0;
@@ -1453,6 +1471,96 @@ summary {
 	display: block;
 	margin: 0;
 	accent-color: var(--color-cta);
+}
+
+/* --- 字段表：一样东西的各项，左边名、右边值，和 .ledger 一样的横线 ---
+ * <dl class="kv">
+ *   <dt>Key</dt><dd class="secret"><input class="mono" type="password" readonly value="…">
+ *     <button class="button compact" type="button">显示</button>…</dd>
+ *   <dt>本周</dt><dd><span class="mono">$3.20 / $30.00</span><span class="meter"><span style="width:11%"></span></span></dd>
+ *   <dt>能调</dt><dd><code>claude-sonnet-5-5</code> …</dd>
+ * </dl>
+ * <p class="actions-row"><button class="button compact danger">轮换</button></p>
+ * 第一行上面一道深线，与表头那道一样；值里的数、key 用 .mono 或 <code>。
+ * dd 里的 .meter 是一根细条，跟在数后面。 */
+.kv {
+	display: grid;
+	grid-template-columns: minmax(6em, max-content) 1fr;
+	margin: var(--space-20) 0 0;
+	font-size: var(--text-xs);
+}
+
+.kv > dt,
+.kv > dd {
+	margin: 0;
+	padding: var(--space-10) var(--space-10) var(--space-10) 0;
+	border-top: 1px solid var(--color-border);
+	min-width: 0;
+}
+
+.kv > dt {
+	padding-right: var(--space-30);
+	color: var(--color-muted);
+}
+
+.kv > dt:first-of-type,
+.kv > dt:first-of-type + dd {
+	border-top-color: var(--color-contrast);
+}
+
+.kv > dd {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-10) var(--space-20);
+	overflow-wrap: anywhere;
+}
+
+.kv > dd.secret input {
+	flex: 1;
+	min-width: 12em;
+}
+
+.kv > dd .meter {
+	flex: 0 1 8rem;
+	height: 4px;
+	margin: 0;
+	color: var(--color-ok);
+}
+
+.kv > dd.warn .meter {
+	color: var(--color-warn);
+}
+
+.kv > dd.bad .meter {
+	color: var(--color-bad);
+}
+
+@media (max-width: 640px) {
+	.kv {
+		grid-template-columns: 1fr;
+	}
+
+	.kv > dt {
+		padding-bottom: 0;
+	}
+
+	.kv > dt + dd {
+		border-top: 0;
+		padding-top: 2px;
+	}
+}
+
+.actions-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-10);
+	margin: var(--space-30) 0 0;
+}
+
+.actions-row form {
+	margin: 0;
 }
 
 /* --- 勾选操作栏：表里勾了行才出现，贴在视口底部 ---

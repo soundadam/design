@@ -35,6 +35,7 @@ configMapGenerator:
       - nav-grid.svg
       - nav-spark.svg
       - nav-globe.svg
+      - nav-wave.svg
       - nav-menu.svg
       - nav-chevron.svg
       - nav-users.svg
