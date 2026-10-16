@@ -60,12 +60,20 @@ themes, so the logo is always `waveform-dark.svg`.
    </div>
    <div class="site-header-cta"><a href="https://my.soundadam.com/">Console</a></div>
   </nav>
-  <div class="site-header-language">…</div>   <!-- or <span class="site-header-account">name …</span> -->
+  <div class="site-header-language">…</div>   <!-- or the account menu below -->
   <button class="hamburger" aria-expanded="false" aria-controls="…">
    <span class="hamburger-box"><span class="hamburger-inner"></span></span></button>
  </div></div>
 </header>
 ```
+
+A console puts the signed-in account where the language switch would be:
+`<details class="site-header-account"><summary><span>name</span></summary>`
+then `.account-card` holding `p.account-who > b(name)`, with an optional `span` (an id) after it, an
+optional `dl > dt + dd` of account facts (mono values), `p.account-label` +
+`nav.segmented.theme-pick` for the theme, and `p.account-links > a…`
+(account settings, sign out). The card opens under the name on the page's own
+colours, so it needs no script.
 
 The toggle buttons, panels and hamburger need a script, which the page
 supplies: it adds `.is-enhanced` to `.site-header`, `.is-open` to an open
@@ -116,6 +124,8 @@ and these blocks:
 | Table | `.table-wrap > table.data`, `.num` on number cells, `.share > span` as a share bar (takes `.series-N`) |
 | Ledger | `table.data.ledger`: one value per cell, the unit in the header, `.zero` for a muted —; a `tbody` per group led by `tr.group > th[scope=rowgroup]` with its subtotal, member rows `th[scope=row]` indented under it, `tfoot > tr.total` between a rule and a double rule; `.warn`/`.bad` colour a cell that means something; a link in the row header drills down; `td.pick > input[type=checkbox]` ticks a row |
 | Selection bar | `form.picking` around a ledger with ticks, holding `.selection-bar > span.picked > b.count` then `label > span + input` and `.button.compact`s: shown, stuck to the bottom of the viewport, only while a row in `tbody` is ticked; the count needs no script, and a select-all box in `thead` is not counted |
+| Fields | `dl.kv > dt + dd` × n: one thing's fields, name left and value right, ruled like a ledger; `dd.secret > input.mono + .button.compact…` for a key, `dd > span.mono + .meter > span` for a used amount (`dd.warn`/`.bad` colour the bar); then `p.actions-row` of `.button.compact`s (or forms holding one) |
+| Monospace | `.mono` on a value that is an amount, id, or address outside a `<code>`; `.ledger .num` cells are already mono |
 | Crumbs | `nav.crumbs > a… + span[aria-current]` above the title: the levels above this page |
 | Sidebar | `.console-shell > nav.console-sidebar + main.console`. The nav holds `input#side-toggle.side-toggle`, then `label.side-bar[for=side-toggle]` (`i.nav-icon.nav-menu`, a `span` naming the current page, `i.nav-icon.nav-chevron`), then `.side-list` with `a` (概览, led by `i.nav-icon.nav-grid`) and `.side-group > span.side-title(i.nav-icon.nav-<icon> + name) + a…`; a link to another site ends with `i.nav-icon.nav-external`; current link `aria-current="page"`, icons `aria-hidden="true"`. Wide screens show the list as a column and hide the bar; narrow screens show the bar and open the list when the box is checked. On wide screens the sidebar sits against the window's left edge at full height, the top bar's contents span the window, and every page's content container has the same width, so neither the sidebar nor the title moves between pages. A `.console-footer` goes inside `main`. A plain page's content uses `--console-width` at the container's left; `.console-shell.wide` lets a dashboard use the whole container |
 
