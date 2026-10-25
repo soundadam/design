@@ -86,30 +86,38 @@
 	--space-70: clamp(56px, 9vw, 104px); /* 栏目段落之间的呼吸 */
 
 	/* --- 排版 ---
-	 * 中英文都用 Noto Sans SC。先点本机的名字：Linux 桌面装的叫 Noto Sans
-	 * CJK SC，自己装过的叫 Noto Sans SC，有就整套用本机的，不下载。没有的话
-	 * 西文用 fonts.css 下发的 Latin；汉字苹果设备用苹方，其余（Windows）用下发
-	 * 的 Han。微软雅黑不进栈：它在 Windows 上排在 Han 前面就会顶掉 Noto，在
-	 * Linux 上 fontconfig 还会把这个名字映射成文泉驿。 */
-	--font-sans: "Noto Sans CJK SC", "Noto Sans SC", "Noto Sans SC Latin",
-		"PingFang SC", "Hiragino Sans GB", "Noto Sans SC Han", system-ui,
+	 * 中英文都用 IBM Plex Sans：西文与汉字是同一套设计，混排时字面大小、
+	 * 笔画粗细对得上。两个家族都由 fonts.css 下发，名字只指下发的文件——
+	 * 本机装的 Plex 不点，免得它的西文引号顶掉中文全角引号。下发的汉字只有
+	 * GB 2312 一级字，其余的落到系统：苹果用苹方，Linux 用 Noto。微软雅黑
+	 * 不进栈：Linux 上 fontconfig 会把这个名字映射成文泉驿。 */
+	--font-sans: "Plex Sans Latin", "Plex Sans Han", "PingFang SC",
+		"Noto Sans CJK SC", "Noto Sans SC", "Hiragino Sans GB", system-ui,
 		-apple-system, "Segoe UI", sans-serif;
-	--font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	/* 等宽标签里的汉字（kicker、命令旁的说明）用 Plex 的汉字，不落到系统黑体。 */
+	--font-mono: "Fira Code", "Plex Sans Han", ui-monospace, SFMono-Regular, Menlo,
+		Consolas, monospace;
 	--font-editorial: Georgia, "Noto Serif CJK SC", "Songti SC", STSong, serif;
 
-	/* 字号阶。一个页面上同时出现的字号不超过四级，别再往里加。 */
+	/* 字重只有两档，下发的文件也只有这两档：500 落到 400、700 落到 600，
+	 * 中英文落到同一档。层级靠字号与颜色，不靠再加一档字重。 */
+	--weight-regular: 400;
+	--weight-strong: 600;
+
+	/* 字号阶。正文往上相邻两级至少差一成半，一眼分得出主次；一个页面上
+	 * 同时出现的字号不超过四级，别再往里加。 */
 	--text-2xs: 0.75rem; /* 12 —— 版权行、面板 kicker */
-	--text-xs: 0.875rem; /* 14 —— 图注、日期 */
-	--text-sm: 0.9375rem; /* 15 —— 页脚链接、次要说明 */
+	--text-xs: 0.8125rem; /* 13 —— 图注、日期 */
+	--text-sm: 0.9375rem; /* 15 —— 控制台正文、页脚链接 */
 	--text-base: 1.0625rem; /* 17 —— 正文 */
-	--text-md: 1.1875rem; /* 19 —— 卡片标题、导航 */
-	--text-lg: 1.375rem; /* 22 —— 引导句 */
+	--text-md: 1.25rem; /* 20 —— 卡片标题、导航 */
+	--text-lg: 1.5rem; /* 24 —— 引导句 */
 
 	/* 标题阶。四级各自有独立区间，hero 与栏目标题不会撞成同一个字号。 */
 	--text-h1: clamp(2.5rem, 1.2rem + 5vw, 5.5rem); /* 40 → 88 */
 	--text-h2: clamp(1.875rem, 1.4rem + 2vw, 2.75rem); /* 30 → 44 */
 	--text-h3: clamp(1.375rem, 1.15rem + 0.9vw, 1.75rem); /* 22 → 28 */
-	--text-h4: 1.1875rem; /* 19 */
+	--text-h4: 1.25rem; /* 20 */
 
 	/* 刊物式首页：大字与细线。 */
 	--text-display: clamp(3.3rem, 0.6rem + 8.2vw, 7.75rem);
@@ -183,6 +191,18 @@
 	--console-wide-width: 76rem; /* 仪表盘一类的宽页 */
 	--console-sidebar-width: 13rem; /* 控制台侧边栏 */
 	--measure: 44rem; /* 一行的字数上限 */
+}
+
+/* 中文页面（<html lang="zh-CN">）。汉字占满整个字身：负字距会把字挤在
+ * 一起，1.02 的行高会让上下两行几乎相碰。中文没有斜体，刊物式的第二种
+ * 字体换成同一套无衬线，靠颜色区分；页面把那一行的 font-style 也设回 normal。 */
+:lang(zh) {
+	--tracking-display: 0;
+	--tracking-tight: 0;
+	--tracking-wide: 0.04em;
+	--leading-display: 1.2;
+	--leading-tight: 1.25;
+	--font-editorial: var(--font-sans);
 }
 
 /* 暗色。只覆盖颜色与阴影；名字必须是上面已经声明的 token。
