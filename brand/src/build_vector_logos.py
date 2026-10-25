@@ -25,7 +25,7 @@ GRID_MARGIN = 48
 WORDMARK_GAP = 64
 WORDMARK_FILL_LIGHT = "#050505"
 # The wordmark on a dark page; the hat keeps its blue gradient.
-WORDMARK_FILL_DARK = "#f1eef3"
+WORDMARK_FILL_DARK = "#f0f2f4"
 
 GRADIENT_STOPS = [
     (0, "#006fe8"),
