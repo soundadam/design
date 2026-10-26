@@ -1,4 +1,4 @@
-.PHONY: check test brand artifact fonts
+.PHONY: check test brand artifact fonts fonts-plex
 
 # The local gate; CI runs the same target.
 check: test artifact
@@ -22,3 +22,9 @@ brand:
 # the printed unicode-range lines into web/fonts.css.
 fonts:
 	uv run fonts/subset.py "$(SRC)"
+
+# Recuts web/plex-sans-*.woff2: make fonts-plex LATIN=path/to/IBMPlexSans[wdth,wght].ttf
+# (google/fonts, ofl/ibmplexsans) SC=path/to/fonts/complete/woff2/hinted (npm
+# @ibm/plex-sans-sc), then copy the printed unicode-range lines into web/fonts.css.
+fonts-plex:
+	uv run fonts/plex.py "$(LATIN)" "$(SC)"

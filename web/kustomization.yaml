@@ -1,7 +1,7 @@
 # The cluster form of this directory: ConfigMap `design` holding every
-# served file under its own name, except the two Han font files, which get a
+# served file under its own name, except the four Han font files, which get a
 # ConfigMap each because a ConfigMap holds at most 1 MiB. Pods mount the
-# three into one directory (a projected volume). A release pushes web/ as an OCI artifact
+# five into one directory (a projected volume). A release pushes web/ as an OCI artifact
 # (.github/workflows/release.yml); Flux applies it into the namespace that
 # serves the files. Binary files land in binaryData.
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -20,8 +20,10 @@ configMapGenerator:
       - header.css
       - console.css
       - noto-sans-sc-latin.woff2
+      - plex-sans-latin.woff2
       - fira-code-variable.woff2
       - OFL-NotoSansSC.txt
+      - OFL-IBMPlex.txt
       - OFL-FiraCode.txt
       - waveform.svg
       - waveform-dark.svg
@@ -48,3 +50,9 @@ configMapGenerator:
   - name: design-han-2
     files:
       - noto-sans-sc-han-2.woff2
+  - name: design-plex-400
+    files:
+      - plex-sans-han-400.woff2
+  - name: design-plex-600
+    files:
+      - plex-sans-han-600.woff2

@@ -7,10 +7,10 @@ stylesheet for member consoles. Everything served lives flat in [`web/`](web/).
 | File | What it is |
 | --- | --- |
 | `web/tokens.css` | All tokens. Light on `:root`; dark applies on pages that opt in |
-| `web/fonts.css` | `@font-face` for Noto Sans SC (a Latin file, two Han files) and Fira Code, relative to itself; `--font-sans` prefers an installed Noto and PingFang, so most devices download only part of it |
+| `web/fonts.css` | `@font-face` for IBM Plex Sans (a Latin file, a Han file for each of the two weights) and Fira Code, relative to itself; a page downloads a Han file only when it shows Chinese. The Noto Sans SC faces are no longer in `--font-sans` and go in the next major release |
 | `web/header.css` | The top bar both sites share (see [Top bar](#top-bar)) |
 | `web/console.css` | Member-console components (see [Console](#console)) |
-| `web/*.woff2`, `web/OFL-*.txt` | Fonts and their licences; the Noto files are cut by `make fonts` ([fonts/subset.py](fonts/subset.py)) |
+| `web/*.woff2`, `web/OFL-*.txt` | Fonts and their licences; the Plex files are cut by `make fonts-plex` ([fonts/plex.py](fonts/plex.py)), the Noto files by `make fonts` ([fonts/subset.py](fonts/subset.py)) |
 | `web/waveform.svg`, `web/waveform-dark.svg` | Lockup for light and dark pages |
 | `web/mark*.svg`, `web/favicon.*`, `web/*.png` | Marks and icons ([brand/README.md](brand/README.md)) |
 | `web/nav-*.svg` | Sidebar icons, drawn as CSS masks in the current text colour |
@@ -25,7 +25,7 @@ runtime.
 | Consumer | How it takes a release |
 | --- | --- |
 | soundadam.com (`soundadam/www-src`) | Hugo module `github.com/soundadam/design`, version in its `go.mod`; mounts are in [hugo.toml](hugo.toml) |
-| my.soundadam.com (`soundadam/platform-gitops`) | Flux `OCIRepository` on `oci://ghcr.io/soundadam/design` pinned to one tag, the same `DESIGN_VERSION` its pages carry; `web/` becomes ConfigMaps `design`, `design-han-1` and `design-han-2` ([web/kustomization.yaml](web/kustomization.yaml)), mounted together as one directory and served at `/_design/<version>/` only while `version.txt` matches |
+| my.soundadam.com (`soundadam/platform-gitops`) | Flux `OCIRepository` on `oci://ghcr.io/soundadam/design` pinned to one tag, the same `DESIGN_VERSION` its pages carry; `web/` becomes ConfigMaps `design`, `design-han-1`, `design-han-2`, `design-plex-400` and `design-plex-600` ([web/kustomization.yaml](web/kustomization.yaml)), mounted together as one directory and served at `/_design/<version>/` only while `version.txt` matches |
 
 ## Dark mode
 

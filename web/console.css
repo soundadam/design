@@ -30,6 +30,9 @@ body {
 	-webkit-font-smoothing: antialiased;
 	/* 中文标点挤压（Chrome 123+），行首行尾的全角标点不再留半个字的空。 */
 	text-spacing-trim: normal;
+	/* 汉字与西文、数字之间自动留出约四分之一字的空（Chrome 140+、Safari 18.4+），
+	 * 文案里手打的空格照旧生效，不会叠成两份。 */
+	text-autospace: normal;
 }
 
 a {
@@ -179,7 +182,7 @@ a:hover {
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius-lg);
 	box-shadow: var(--shadow-sm);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 	cursor: pointer;
 	user-select: none;
 }
@@ -230,7 +233,7 @@ a:hover {
 	padding: 0 var(--space-20);
 	border-radius: var(--radius-md);
 	color: var(--color-muted);
-	font-weight: 500;
+	font-weight: var(--weight-regular);
 	text-decoration: none;
 }
 
@@ -242,7 +245,7 @@ a:hover {
 .side-list a[aria-current] {
 	color: var(--color-contrast);
 	background: var(--color-accent-surface);
-	font-weight: 700;
+	font-weight: var(--weight-strong);
 }
 
 .side-group {
@@ -259,7 +262,7 @@ a:hover {
 	min-height: 32px;
 	padding: 0 var(--space-20);
 	color: var(--color-contrast);
-	font-weight: 700;
+	font-weight: var(--weight-strong);
 }
 
 .side-title .nav-icon {
@@ -369,7 +372,7 @@ a:hover {
 /* 负字距只收紧拉丁字母，汉字挤在一起反而难看，所以标题不收字距。 */
 .console > h1 {
 	font-size: var(--text-h3);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 	line-height: var(--leading-snug);
 	margin: 0 0 var(--space-30);
 }
@@ -392,7 +395,7 @@ section {
 
 h2 {
 	font-size: var(--text-md);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 	margin: 0 0 var(--space-20);
 }
 
@@ -412,7 +415,7 @@ h2 {
 	border-radius: var(--radius-lg);
 	padding: var(--space-20) var(--space-30);
 	margin-bottom: var(--space-30);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 }
 
 /* 操作成功后的回执，与 .notice 同形。 */
@@ -426,7 +429,7 @@ h2 {
 	padding: 0 var(--space-20);
 	border-radius: var(--radius-pill);
 	font-size: var(--text-2xs);
-	font-weight: 700;
+	font-weight: var(--weight-strong);
 	line-height: 1.8;
 }
 
@@ -472,7 +475,7 @@ h2 {
 
 .tile .figure {
 	font-size: var(--text-lg);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 	line-height: var(--leading-snug);
 	margin: var(--space-10) 0;
 	font-variant-numeric: tabular-nums;
@@ -566,7 +569,7 @@ h2 {
 .products b {
 	display: block;
 	font-size: var(--text-md);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 }
 
 .products small {
@@ -623,7 +626,7 @@ h2 {
 	background: none;
 	color: var(--color-contrast);
 	font: inherit;
-	font-weight: 400;
+	font-weight: var(--weight-regular);
 	line-height: 1.2;
 	text-align: center;
 	word-break: keep-all;
@@ -654,7 +657,7 @@ h2 {
 }
 
 .segmented > :is([aria-current], [aria-pressed="true"], :has(> input:checked)) {
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 }
 
 .segmented > :is([aria-current], [aria-pressed="true"], :has(> input:checked))::before,
@@ -892,7 +895,7 @@ h2 {
 
 .breakdown b {
 	min-width: 3.5em;
-	font-weight: 500;
+	font-weight: var(--weight-strong);
 	text-align: right;
 }
 
@@ -955,7 +958,7 @@ pre {
 	min-height: var(--control-height);
 	text-align: center;
 	font: inherit;
-	font-weight: 700;
+	font-weight: var(--weight-strong);
 	padding: var(--space-20) var(--space-30);
 	border-radius: var(--radius-md);
 	border: 1px solid var(--color-cta);
@@ -1104,7 +1107,7 @@ pre {
 
 .option b {
 	display: block;
-	font-weight: 500;
+	font-weight: var(--weight-strong);
 }
 
 .option small {
@@ -1156,7 +1159,7 @@ pre {
 .field > span {
 	color: var(--color-muted);
 	font-size: var(--text-2xs);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 }
 
 .field input,
@@ -1205,7 +1208,7 @@ pre {
 	border-radius: var(--radius-pill);
 	color: var(--color-muted);
 	font-size: var(--text-2xs);
-	font-weight: 700;
+	font-weight: var(--weight-strong);
 	line-height: 1.8;
 	transition: background var(--transition-fast), border-color var(--transition-fast);
 }
@@ -1341,7 +1344,7 @@ summary {
 .data th {
 	color: var(--color-muted);
 	font-size: var(--text-2xs);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 	text-align: left;
 	padding: 0 var(--space-10) var(--space-10);
 	white-space: nowrap;
@@ -1399,7 +1402,7 @@ summary {
 .ledger tfoot th {
 	color: var(--color-contrast);
 	font-size: inherit;
-	font-weight: 400;
+	font-weight: var(--weight-regular);
 	padding: var(--space-10);
 	white-space: normal;
 }
@@ -1429,7 +1432,7 @@ summary {
 
 .ledger tr.group > * {
 	padding-top: var(--space-20);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 }
 
 .ledger tr.group ~ tr > th[scope="row"] {
@@ -1437,7 +1440,7 @@ summary {
 }
 
 .ledger tr.total > * {
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 	border-top: 1px solid var(--color-contrast);
 	border-bottom: 3px double var(--color-contrast);
 }

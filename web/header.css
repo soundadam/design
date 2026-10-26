@@ -17,6 +17,7 @@
 	background: var(--color-panel);
 	color: var(--color-panel-text);
 	font-family: var(--font-sans);
+	text-autospace: normal;
 	position: sticky;
 	top: 0;
 	z-index: 20;
@@ -82,7 +83,7 @@
 	position: relative;
 	text-decoration: none;
 	font-size: var(--text-sm);
-	font-weight: 500;
+	font-weight: var(--weight-regular);
 	white-space: nowrap;
 }
 
@@ -147,7 +148,7 @@
 	background: var(--color-cta);
 	color: var(--color-on-cta);
 	font-size: var(--text-sm);
-	font-weight: 600;
+	font-weight: var(--weight-strong);
 	text-decoration: none;
 	white-space: nowrap;
 	transition: background var(--transition-fast);
@@ -442,7 +443,7 @@
 .mega-panel__label {
 	display: block;
 	font-size: var(--text-base);
-	font-weight: 500;
+	font-weight: var(--weight-strong);
 }
 
 .mega-panel__desc {
