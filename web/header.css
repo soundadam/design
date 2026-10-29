@@ -93,7 +93,7 @@
 	right: 0;
 	bottom: 0;
 	height: 3px;
-	background: var(--color-cta);
+	background: var(--color-panel-cta);
 	content: "";
 	transform: scaleX(0);
 	transition: transform var(--transition-fast);
@@ -145,8 +145,8 @@
 	min-height: var(--control-height);
 	padding: 0 var(--space-30);
 	border-radius: var(--radius-md);
-	background: var(--color-cta);
-	color: var(--color-on-cta);
+	background: var(--color-panel-cta);
+	color: var(--color-on-panel-cta);
 	font-size: var(--text-sm);
 	font-weight: var(--weight-strong);
 	text-decoration: none;
@@ -156,8 +156,8 @@
 
 .site-header-cta a:hover,
 .site-header-cta a:focus-visible {
-	background: var(--color-cta-hover);
-	color: var(--color-on-cta);
+	background: var(--color-panel-cta-hover);
+	color: var(--color-on-panel-cta);
 }
 
 .site-header-language a,
@@ -567,7 +567,7 @@ body.has-menu-active {
 	}
 
 	.mega-item.is-open .mega-item__label {
-		border-bottom: 3px solid var(--color-cta);
+		border-bottom: 3px solid var(--color-panel-cta);
 	}
 
 	.mega-item__label > a::after {
