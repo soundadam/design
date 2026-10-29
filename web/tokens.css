@@ -5,17 +5,20 @@
  * 暗色值，没写这个属性（或写 "light"）的页面始终是亮色——
  * 一个页面在暗色下没过视觉检查，就不该被系统设置翻成暗色。
  *
- * 页面强调色是品红（CTA 与链接），logo 保持自己的蓝色渐变，两者互不跟随。
+ * 视觉语言取自 Dayscope：暖调、几乎无彩的灰，墨色做主按钮和正文链接，层级
+ * 靠明度（墨、中灰、淡）而不靠色相。唯一的强调色是品牌红，只用在少数几处：
+ * 当前位置的标记、焦点环、链接下划线、活跃度和第一个图表系列，以及顶栏的
+ * Console 按钮。logo 保持自己的蓝色渐变，两者互不跟随。
  * 改这里的值等于改所有使用方的视觉，见 .claude/rules/tokens.md。
  */
 
 :root {
 	color-scheme: light;
 
-	/* --- 页面强调色阶：以 CTA 品红为主色 --- */
-	--color-brand-800: #86165c; /* 正文链接 */
-	--color-brand-700: #c53490; /* CTA hover */
-	--color-brand-600: #d62293; /* CTA 主色 */
+	/* --- 品牌红：唯一的强调色，见文件头 --- */
+	--color-brand-800: #86165c;
+	--color-brand-700: #c53490; /* 顶栏 Console 按钮 hover */
+	--color-brand-600: #d62293; /* 强调色本身 */
 	--color-brand-500: #df59ad;
 	--color-brand-400: #e78ac6;
 	--color-brand-100: #f6d3e9;
@@ -24,39 +27,44 @@
 	--gradient-brand: linear-gradient(90deg, var(--color-brand-600) 0%, var(--color-brand-500) 55%, var(--color-brand-400) 100%);
 
 	/* --- 语义色 --- */
-	--color-base: #ffffff;
-	--color-contrast: #111111;
-	--color-cta: var(--color-brand-600);
-	--color-cta-hover: var(--color-brand-700);
-	--color-on-cta: #ffffff; /* CTA 底色上的文字，两种模式都是白 */
+	--color-base: #faf9f6; /* 纸色，略暖的白 */
+	--color-contrast: #1a1915; /* 墨色 */
+	--color-cta: var(--color-contrast); /* 主按钮是墨色，不是强调色 */
+	--color-cta-hover: #46443e;
+	--color-on-cta: var(--color-base);
 	--color-paper: #ffffff; /* 必须是浅底的内容（二维码），暗色下也不换 */
-	--color-link: var(--color-brand-800);
+	--color-link: var(--color-contrast); /* 链接是墨色，靠强调色的下划线认出来 */
 	--color-link-hover: var(--color-brand-600);
-	--color-accent-surface: var(--color-brand-050);
-	--color-accent-border: var(--color-brand-100);
+	--color-accent-surface: var(--color-gray-100); /* 次要控件 hover、提示条：淡底，不着色 */
+	--color-accent-border: var(--color-gray-400);
 	--color-accent-soft: var(--color-brand-400);
-	--color-accent-marker: var(--color-brand-500);
+	--color-accent-marker: var(--color-brand-600); /* 当前位置、焦点环、选中的边 */
+	/* 顶栏（深色）上的 Console 按钮：强调色留在两个站都看得见的这一处。 */
+	--color-panel-cta: var(--color-brand-600);
+	--color-panel-cta-hover: var(--color-brand-700);
+	--color-on-panel-cta: #ffffff;
 
-	/* --- 中性灰阶 --- */
-	--color-gray-050: #fdfdfd;
-	--color-gray-100: #f8f8f8;
-	--color-gray-300: #eaeaea;
-	--color-gray-400: #d0d0d0;
-	--color-gray-500: #666666;
-	--color-gray-700: #626262;
+	/* --- 中性灰阶：暖调、色度很低，里面没有蓝 --- */
+	--color-gray-050: #fcfbf9;
+	--color-gray-100: #f0eee8; /* 淡底：侧栏、数据块、分段控件的槽 */
+	--color-gray-300: #e8e6df; /* 细线 */
+	--color-gray-400: #d6d4cc; /* 较重的线、输入框 hover */
+	--color-gray-500: #66645d; /* 次要文字 */
+	--color-gray-600: #8e8c84; /* 中灰：图表里不强调的柱 */
+	--color-gray-700: #46443e;
 
 	/* --- 界面层次：控制台这类「页面底 + 卡片」的布局用这组 --- */
 	--color-canvas: var(--color-base); /* 页面底；控制台的分节直接铺在这上面 */
-	--color-surface: var(--color-base); /* 浮层：窄屏菜单、选中的标签 */
+	--color-surface: #ffffff; /* 浮起的一层：侧栏里的当前页、输入框、窄屏菜单 */
 	--color-surface-muted: var(--color-gray-100); /* 卡片里的数据块、代码、输入框 */
 	--color-border: var(--color-gray-300);
 	--color-muted: var(--color-gray-500); /* 次要文字 */
-	--color-sidebar: #f6f6f7; /* 控制台侧栏：比页面底深一档，贴着窗口左边 */
-	--color-sidebar-hover: #eaeaec;
-	--color-heat: var(--color-brand-500); /* 活跃度格子；深浅用不透明度分档 */
+	--color-sidebar: var(--color-gray-100); /* 控制台侧栏：比页面底深一档，贴着窗口左边 */
+	--color-sidebar-hover: #e6e4dd;
+	--color-heat: var(--color-brand-600); /* 活跃度格子；深浅用不透明度分档 */
 
 	/* --- 状态色：文字色与它的浅底成对使用 --- */
-	--color-ok: #15803d;
+	--color-ok: #13743a;
 	--color-ok-surface: #dcfce7;
 	--color-warn: #a14a07;
 	--color-warn-surface: #fef3c7;
@@ -69,7 +77,7 @@
 	--color-series-3: #0f9d8a;
 	--color-series-4: #e38a12;
 	--color-series-5: #7c4dd6;
-	--color-series-6: #9a9a9a;
+	--color-series-6: var(--color-gray-600);
 
 	/* 导航栏目色，同时供移动端抽屉使用。 */
 	--color-slot-about: #dd9ef4;
@@ -144,14 +152,14 @@
 	--radius-pill: 999px;
 	--border-hairline: 1px solid var(--color-gray-300);
 	--rule-strong: 1px solid var(--color-contrast);
-	--shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.05);
-	--shadow-md: 0 6px 16px -6px rgba(17, 17, 17, 0.12);
-	--shadow-lg: 0 18px 40px -18px rgba(17, 17, 17, 0.28);
+	--shadow-sm: 0 1px 2px rgba(26, 25, 21, 0.05);
+	--shadow-md: 0 6px 16px -6px rgba(26, 25, 21, 0.12);
+	--shadow-lg: 0 18px 40px -18px rgba(26, 25, 21, 0.28);
 	/* 分段控件：浅槽里一块浮起来的滑块（console.css 的 .segmented）。 */
-	--color-segment-track: #eeeeef;
-	--color-segment-thumb: #ffffff;
-	--shadow-thumb: 0 3px 8px rgba(17, 17, 17, 0.12), 0 3px 1px rgba(17, 17, 17, 0.04);
-	--color-scroll-edge: rgba(17, 17, 17, 0.16); /* 表格还能横向滚动的那一侧 */
+	--color-segment-track: var(--color-gray-100);
+	--color-segment-thumb: var(--color-surface);
+	--shadow-thumb: 0 3px 8px rgba(26, 25, 21, 0.12), 0 3px 1px rgba(26, 25, 21, 0.04);
+	--color-scroll-edge: rgba(26, 25, 21, 0.16); /* 表格还能横向滚动的那一侧 */
 
 	/* --- 动效。reduced-motion 下由使用方统一关掉 --- */
 	--transition-fast: 0.15s ease;
@@ -174,14 +182,14 @@
 	--menu-icon-offset: 7px;
 	/* 深色面板：项目卡片的命令块，以及两个站共用的顶栏（header.css）。
 	 * 顶栏在亮色、暗色页面上都是深色。 */
-	--color-panel: #161a1e;
-	--color-panel-raised: #1f2328; /* 顶栏展开的菜单面板 */
-	--color-panel-rule: #3a3f45; /* 面板里的分隔线 */
-	--color-panel-text: #f4f4f4;
-	--color-panel-muted: #b7b7b7;
+	--color-panel: #1a1915;
+	--color-panel-raised: #30302e; /* 顶栏展开的菜单面板 */
+	--color-panel-rule: #44433f; /* 面板里的分隔线 */
+	--color-panel-text: #faf9f5;
+	--color-panel-muted: #b5b3aa;
 	--color-panel-accent: #f1a4d4;
-	--color-link-rule: #bd4b91;
-	--color-surface-project: #f5f3f6;
+	--color-link-rule: var(--color-brand-600); /* 链接的下划线 */
+	--color-surface-project: #f3f1ec;
 
 	/* --- 布局 --- */
 	--gutter: clamp(24px, 4vw, 48px);
@@ -206,29 +214,29 @@
 }
 
 /* 暗色。只覆盖颜色与阴影；名字必须是上面已经声明的 token。
- * 页面底比卡片深，卡片比卡片里的数据块深：越靠前的层越亮。
- * 中性灰取 logo 蓝的色相（OKLCH 255°）、色度很低：偏紫的灰贴着品红会显得发红发闷。 */
+ * 和亮色同一套暖灰：页面底最深，浮起的一层（当前页、输入框）亮一档，淡底
+ * （侧栏、数据块）再亮一档。墨色按钮翻成浅色，按钮上的字跟着页面底变深。 */
 @media (prefers-color-scheme: dark) {
 	:root[data-theme="auto"] {
 		color-scheme: dark;
 
-		--color-base: #181b20;
-		--color-contrast: #f0f2f4;
-		--color-link: var(--color-brand-400);
-		--color-link-hover: var(--color-brand-100);
-		--color-accent-surface: #391d2b;
-		--color-accent-border: #763155;
+		--color-base: #1f1e1d;
+		--color-contrast: #ecebe6;
+		--color-cta-hover: #c9c7bf;
+		--color-link-hover: var(--color-brand-400);
+		--color-accent-marker: var(--color-brand-500);
 
-		--color-gray-050: #1c1f24;
-		--color-gray-100: #21252a;
-		--color-gray-300: #34383e;
-		--color-gray-400: #484e54;
-		--color-gray-500: #a3a8af;
-		--color-gray-700: #b9bec4;
+		--color-gray-050: #232221;
+		--color-gray-100: #2c2b29;
+		--color-gray-300: #33322f;
+		--color-gray-400: #44433f;
+		--color-gray-500: #a6a49b;
+		--color-gray-600: #77756e;
+		--color-gray-700: #c4c2b9;
 
-		--color-canvas: #0f1216;
-		--color-sidebar: #13161b;
-		--color-sidebar-hover: #24292e;
+		--color-surface: #262624;
+		--color-sidebar-hover: #363532;
+		--color-heat: var(--color-brand-500);
 
 		--color-ok: #4ade80;
 		--color-ok-surface: #12301d;
@@ -242,23 +250,18 @@
 		--color-series-3: #3cc7b0;
 		--color-series-4: #f2a73b;
 		--color-series-5: #a585ec;
-		--color-series-6: #77727d;
 
 		--color-code-string: #4fd1b9;
 		--color-code-number: #f4a64a;
 		--color-code-error: #ff8a80;
 
-		--color-panel: #161a1e;
-		--color-panel-raised: #1f2328;
-		--color-panel-rule: #3a3f45;
 		--color-link-rule: var(--color-brand-500);
-		--color-surface-project: #1e2125;
+		--color-surface-project: #262624;
 
 		--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
 		--shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.5);
 		--shadow-lg: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
-		--color-segment-track: #272b30;
-		--color-segment-thumb: #4b5057;
+		--color-segment-thumb: #3a3936;
 		--shadow-thumb: 0 3px 8px rgba(0, 0, 0, 0.4);
 		--color-scroll-edge: rgba(0, 0, 0, 0.6);
 	}
@@ -270,23 +273,23 @@
 :root[data-theme="dark"] {
 	color-scheme: dark;
 
-	--color-base: #181b20;
-	--color-contrast: #f0f2f4;
-	--color-link: var(--color-brand-400);
-	--color-link-hover: var(--color-brand-100);
-	--color-accent-surface: #391d2b;
-	--color-accent-border: #763155;
+	--color-base: #1f1e1d;
+	--color-contrast: #ecebe6;
+	--color-cta-hover: #c9c7bf;
+	--color-link-hover: var(--color-brand-400);
+	--color-accent-marker: var(--color-brand-500);
 
-	--color-gray-050: #1c1f24;
-	--color-gray-100: #21252a;
-	--color-gray-300: #34383e;
-	--color-gray-400: #484e54;
-	--color-gray-500: #a3a8af;
-	--color-gray-700: #b9bec4;
+	--color-gray-050: #232221;
+	--color-gray-100: #2c2b29;
+	--color-gray-300: #33322f;
+	--color-gray-400: #44433f;
+	--color-gray-500: #a6a49b;
+	--color-gray-600: #77756e;
+	--color-gray-700: #c4c2b9;
 
-	--color-canvas: #0f1216;
-	--color-sidebar: #13161b;
-	--color-sidebar-hover: #24292e;
+	--color-surface: #262624;
+	--color-sidebar-hover: #363532;
+	--color-heat: var(--color-brand-500);
 
 	--color-ok: #4ade80;
 	--color-ok-surface: #12301d;
@@ -300,23 +303,18 @@
 	--color-series-3: #3cc7b0;
 	--color-series-4: #f2a73b;
 	--color-series-5: #a585ec;
-	--color-series-6: #77727d;
 
 	--color-code-string: #4fd1b9;
 	--color-code-number: #f4a64a;
 	--color-code-error: #ff8a80;
 
-	--color-panel: #161a1e;
-	--color-panel-raised: #1f2328;
-	--color-panel-rule: #3a3f45;
 	--color-link-rule: var(--color-brand-500);
-	--color-surface-project: #1e2125;
+	--color-surface-project: #262624;
 
 	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
 	--shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.5);
 	--shadow-lg: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
-	--color-segment-track: #272b30;
-	--color-segment-thumb: #4b5057;
+	--color-segment-thumb: #3a3936;
 	--shadow-thumb: 0 3px 8px rgba(0, 0, 0, 0.4);
 	--color-scroll-edge: rgba(0, 0, 0, 0.6);
 }
