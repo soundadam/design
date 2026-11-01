@@ -26,6 +26,12 @@
 
 	--gradient-brand: linear-gradient(90deg, var(--color-brand-600) 0%, var(--color-brand-500) 55%, var(--color-brand-400) 100%);
 
+	/* --- 陶土色：桌面应用（app.css）的强调色，在那里顶替品牌红 ---
+	 * 用处和品牌红一样少：选中的那一行、正在进行的事、焦点环、链接下划线。 */
+	--color-clay: #b85a35;
+	--color-clay-surface: #f3e9e3; /* 多选里勾上的几行 */
+	--color-on-clay: #ffffff;
+
 	/* --- 语义色 --- */
 	--color-base: #faf9f6; /* 纸色，略暖的白 */
 	--color-contrast: #1a1915; /* 墨色 */
@@ -160,6 +166,8 @@
 	--color-segment-thumb: var(--color-surface);
 	--shadow-thumb: 0 3px 8px rgba(26, 25, 21, 0.12), 0 3px 1px rgba(26, 25, 21, 0.04);
 	--color-scroll-edge: rgba(26, 25, 21, 0.16); /* 表格还能横向滚动的那一侧 */
+	/* 浮在窗口上的菜单（app.css 的 .menu）。纯黑的影，暗色下照样看得出，不另设暗色值。 */
+	--shadow-pop: 0 12px 32px -12px rgba(0, 0, 0, 0.25);
 
 	/* --- 动效。reduced-motion 下由使用方统一关掉 --- */
 	--transition-fast: 0.15s ease;
@@ -234,7 +242,11 @@
 		--color-gray-600: #77756e;
 		--color-gray-700: #c4c2b9;
 
-		--color-surface: #262624;
+		--color-clay: #d97757;
+	--color-clay-surface: #3a2d27;
+	--color-on-clay: #1f1e1d;
+
+	--color-surface: #262624;
 		--color-sidebar-hover: #363532;
 		--color-heat: var(--color-brand-500);
 
@@ -286,6 +298,10 @@
 	--color-gray-500: #a6a49b;
 	--color-gray-600: #77756e;
 	--color-gray-700: #c4c2b9;
+
+	--color-clay: #d97757;
+	--color-clay-surface: #3a2d27;
+	--color-on-clay: #1f1e1d;
 
 	--color-surface: #262624;
 	--color-sidebar-hover: #363532;

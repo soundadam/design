@@ -19,6 +19,7 @@ configMapGenerator:
       - fonts.css
       - header.css
       - console.css
+      - app.css
       - noto-sans-sc-latin.woff2
       - plex-sans-latin.woff2
       - fira-code-variable.woff2
