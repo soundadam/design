@@ -2,7 +2,7 @@
 
 The visual system every soundadam surface draws from: colour, type, spacing
 and shape tokens (light and dark), the fonts, the marks, and the component
-stylesheet for member consoles. Everything served lives flat in [`web/`](web/).
+stylesheets for member consoles and desktop apps. Everything served lives flat in [`web/`](web/).
 
 | File | What it is |
 | --- | --- |
@@ -10,6 +10,7 @@ stylesheet for member consoles. Everything served lives flat in [`web/`](web/).
 | `web/fonts.css` | `@font-face` for IBM Plex Sans (a Latin file, a Han file for each of the two weights) and Fira Code, relative to itself; a page downloads a Han file only when it shows Chinese. The Noto Sans SC faces are no longer in `--font-sans` and go in the next major release |
 | `web/header.css` | The top bar both sites share (see [Top bar](#top-bar)) |
 | `web/console.css` | Member-console components (see [Console](#console)) |
+| `web/app.css` | Desktop-app components, never loaded with `console.css` (see [Desktop app](#desktop-app)) |
 | `web/*.woff2`, `web/OFL-*.txt` | Fonts and their licences; the Plex files are cut by `make fonts-plex` ([fonts/plex.py](fonts/plex.py)), the Noto files by `make fonts` ([fonts/subset.py](fonts/subset.py)) |
 | `web/waveform.svg`, `web/waveform-dark.svg` | Lockup for light and dark pages |
 | `web/mark*.svg`, `web/favicon.*`, `web/*.png` | Marks and icons ([brand/README.md](brand/README.md)) |
@@ -26,6 +27,7 @@ runtime.
 | --- | --- |
 | soundadam.com (`soundadam/www-src`) | Hugo module `github.com/soundadam/design`, version in its `go.mod`; mounts are in [hugo.toml](hugo.toml) |
 | my.soundadam.com (`soundadam/platform-gitops`) | Flux `OCIRepository` on `oci://ghcr.io/soundadam/design` pinned to one tag, the same `DESIGN_VERSION` its pages carry; `web/` becomes ConfigMaps `design`, `design-han-1`, `design-han-2`, `design-plex-400` and `design-plex-600` ([web/kustomization.yaml](web/kustomization.yaml)), mounted together as one directory and served at `/_design/<version>/` only while `version.txt` matches |
+| Dayscope (`soundadam/ai-soundcard`, `dayscope/`) | Not on a release yet: `app.css` was taken from its own stylesheets, which it still carries; when it moves over it copies one release's `fonts.css`, `tokens.css` and `app.css` into its source tree |
 
 ## Dark mode
 
@@ -133,6 +135,39 @@ Motion: the blocks in `main` fade up one after another on load, and a
 same-origin navigation keeps the top bar and sidebar in place while only
 the content cross-fades (`@view-transition`, Chrome and Safari 18). Both
 are off under `prefers-reduced-motion`.
+
+## Desktop app
+
+A full-window app (Tauri, Electron) such as Dayscope loads `app.css` in place
+of `header.css` and `console.css`. It styles bare `<button>`, so it never
+shares a page with `console.css`. Inside it the accent is clay: the open row,
+the thing in progress, the focus ring and link rules point at `--color-clay`
+instead of brand red. The window itself does not scroll; each view scrolls
+its own part, and interface text is not selectable unless it carries
+`.selectable`.
+
+```html
+<html lang="zh-CN" data-theme="auto">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="app.css">
+```
+
+| Block | Classes |
+| --- | --- |
+| Buttons | Bare `button` is the secondary one (hairline border); `.primary` (ink fill), `.ghost` (no border), `.danger`; `.small` makes it 28px tall, `.square` makes it as wide as it is tall, for a lone glyph |
+| Segmented control | `.segmented > button[aria-pressed]` × 2–5: equal width, a thumb slides under the pressed one, applied on click. Set `--segment-count` and `--segment-index` inline where `:has` is not available |
+| Menu | `.menu > button.more[aria-haspopup=menu][aria-expanded] + .list[role=menu] > button[role=menuitem] > span…` (`span.note` for a shortcut, `hr` between groups, `.danger` last). The list is `position: fixed` and the page's script places it: under the button, right-aligned, upward when there is no room below, 8px from the window edge; it closes on an outside click, Esc, scroll and resize. `.more.small` in a 30px row; `.trigger` in place of `.more` when the trigger is a piece of content, with `.menu.wide` to fill the row |
+| Sidebar | `aside.side > .top > nav.ways > button.way[.on]` (a `kbd` for its shortcut), then `nav.list` of `h2` time headings and rows, then `.ask`, then `.bottom` |
+| Rows | `.row > button.hit > span.time + span.ttl`, then `span.slot` holding the row's menu, shown on hover, on the open row and while its menu is open. `.on` is the open row (raised, its time in clay), `.picked` a ticked row in a multi-selection (clay wash), `.faint` a row with little in it, `.board` a row from another device (a folded corner at the top left). `input.edit` replaces `.hit` while renaming |
+| Fold | `button.fold[aria-expanded] > span.time + span.ttl + svg.chev`, then `.folded > .row…`: several small rows under one line |
+| Confirm bar | `.side > .ask[role=alertdialog] > p > strong(what) + text(what follows)`, then `.btns > button.ghost.small + button.danger.small`. It appears under the list before anything irreversible, in place of a dialog; with nothing to add after the bold line, the `p` holds only the `strong` |
+
+Dayscope's own `--ds-*` names map onto tokens: `bg` → `--color-canvas`,
+`raised` → `--color-surface`, `ink` → `--color-contrast`, `muted` →
+`--color-muted`, `faint` → `--color-border`, `wash` →
+`--color-surface-muted`, `accent` → `--color-clay`, `accent-soft` →
+`--color-clay-surface`, `on-accent` → `--color-on-clay`.
 
 ## Releases
 
