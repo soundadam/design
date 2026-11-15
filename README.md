@@ -140,8 +140,8 @@ are off under `prefers-reduced-motion`.
 
 A full-window app (Tauri, Electron) such as Dayscope loads `app.css` in place
 of `header.css` and `console.css`. It styles bare `<button>`, so it never
-shares a page with `console.css`. Inside it the accent is clay: the open row,
-the thing in progress, the focus ring and link rules point at `--color-clay`
+shares a page with `console.css`. Inside it the accent is teal, taken from matplotlib's viridis so it stays apart from the viridis spectrograms and heat maps an app draws: the open row,
+the thing in progress, the focus ring and link rules point at `--color-teal`
 instead of brand red. The window itself does not scroll; each view scrolls
 its own part, and interface text is not selectable unless it carries
 `.selectable`.
@@ -159,15 +159,15 @@ its own part, and interface text is not selectable unless it carries
 | Segmented control | `.segmented > button[aria-pressed]` × 2–5: equal width, a thumb slides under the pressed one, applied on click. Set `--segment-count` and `--segment-index` inline where `:has` is not available |
 | Menu | `.menu > button.more[aria-haspopup=menu][aria-expanded] + .list[role=menu] > button[role=menuitem] > span…` (`span.note` for a shortcut, `hr` between groups, `.danger` last). The list is `position: fixed` and the page's script places it: under the button, right-aligned, upward when there is no room below, 8px from the window edge; it closes on an outside click, Esc, scroll and resize. `.more.small` in a 30px row; `.trigger` in place of `.more` when the trigger is a piece of content, with `.menu.wide` to fill the row |
 | Sidebar | `aside.side > .top > nav.ways > button.way[.on]` (a `kbd` for its shortcut), then `nav.list` of `h2` time headings and rows, then `.ask`, then `.bottom` |
-| Rows | `.row > button.hit > span.time + span.ttl`, then `span.slot` holding the row's menu, shown on hover, on the open row and while its menu is open. `.on` is the open row (raised, its time in clay), `.picked` a ticked row in a multi-selection (clay wash), `.faint` a row with little in it, `.board` a row from another device (a folded corner at the top left). `input.edit` replaces `.hit` while renaming |
+| Rows | `.row > button.hit > span.time + span.ttl`, then `span.slot` holding the row's menu, shown on hover, on the open row and while its menu is open. `.on` is the open row (raised, its time in teal), `.picked` a ticked row in a multi-selection (teal wash), `.faint` a row with little in it, `.board` a row from another device (a folded corner at the top left). `input.edit` replaces `.hit` while renaming |
 | Fold | `button.fold[aria-expanded] > span.time + span.ttl + svg.chev`, then `.folded > .row…`: several small rows under one line |
 | Confirm bar | `.side > .ask[role=alertdialog] > p > strong(what) + text(what follows)`, then `.btns > button.ghost.small + button.danger.small`. It appears under the list before anything irreversible, in place of a dialog; with nothing to add after the bold line, the `p` holds only the `strong` |
 
 Dayscope's own `--ds-*` names map onto tokens: `bg` → `--color-canvas`,
 `raised` → `--color-surface`, `ink` → `--color-contrast`, `muted` →
 `--color-muted`, `faint` → `--color-border`, `wash` →
-`--color-surface-muted`, `accent` → `--color-clay`, `accent-soft` →
-`--color-clay-surface`, `on-accent` → `--color-on-clay`.
+`--color-surface-muted`, `accent` → `--color-teal`, `accent-soft` →
+`--color-teal-surface`, `on-accent` → `--color-on-teal`.
 
 ## Releases
 

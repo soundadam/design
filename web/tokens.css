@@ -26,11 +26,13 @@
 
 	--gradient-brand: linear-gradient(90deg, var(--color-brand-600) 0%, var(--color-brand-500) 55%, var(--color-brand-400) 100%);
 
-	/* --- 陶土色：桌面应用（app.css）的强调色，在那里顶替品牌红 ---
-	 * 用处和品牌红一样少：选中的那一行、正在进行的事、焦点环、链接下划线。 */
-	--color-clay: #b85a35;
-	--color-clay-surface: #f3e9e3; /* 多选里勾上的几行 */
-	--color-on-clay: #ffffff;
+	/* --- 青：桌面应用（app.css）的强调色，在那里顶替品牌红 ---
+	 * 用处和品牌红一样少：选中的那一行、正在进行的事、焦点环、链接下划线。
+	 * 取自 matplotlib 的 viridis：应用里的频谱、热图用 viridis，强调色和图同一
+	 * 色系，挨着图里的深紫也分得开。 */
+	--color-teal: #2a788e;
+	--color-teal-surface: #e2eef0; /* 多选里勾上的几行 */
+	--color-on-teal: #ffffff;
 
 	/* --- 语义色 --- */
 	--color-base: #faf9f6; /* 纸色，略暖的白 */
@@ -242,9 +244,9 @@
 		--color-gray-600: #77756e;
 		--color-gray-700: #c4c2b9;
 
-		--color-clay: #d97757;
-	--color-clay-surface: #3a2d27;
-	--color-on-clay: #1f1e1d;
+		--color-teal: #35b779;
+		--color-teal-surface: #1f312b;
+		--color-on-teal: #1f1e1d;
 
 	--color-surface: #262624;
 		--color-sidebar-hover: #363532;
@@ -299,9 +301,9 @@
 	--color-gray-600: #77756e;
 	--color-gray-700: #c4c2b9;
 
-	--color-clay: #d97757;
-	--color-clay-surface: #3a2d27;
-	--color-on-clay: #1f1e1d;
+	--color-teal: #35b779;
+	--color-teal-surface: #1f312b;
+	--color-on-teal: #1f1e1d;
 
 	--color-surface: #262624;
 	--color-sidebar-hover: #363532;
