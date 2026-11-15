@@ -205,11 +205,11 @@ func TestTextContrast(t *testing.T) {
 		{"color-bad", "color-canvas"},
 		{"color-warn", "color-canvas"},
 		// The desktop-app layer (app.css): the open row's time, a ticked row,
-		// and a clay-filled control.
-		{"color-clay", "color-surface"},
-		{"color-contrast", "color-clay-surface"},
-		{"color-muted", "color-clay-surface"},
-		{"color-on-clay", "color-clay"},
+		// and a teal-filled control.
+		{"color-teal", "color-surface"},
+		{"color-contrast", "color-teal-surface"},
+		{"color-muted", "color-teal-surface"},
+		{"color-on-teal", "color-teal"},
 		// The shared top bar and its open panels (header.css).
 		{"color-panel-text", "color-panel"},
 		{"color-panel-muted", "color-panel"},

@@ -6,21 +6,21 @@
  * 应用自己的视图。这里直接给裸的 <button> 定样式，和 console.css 的 .button
  * 放在一起会互相顶掉。
  *
- * 依赖 fonts.css、tokens.css 先加载。值一律引用 token。强调色换成陶土色
- * （--color-clay），品牌红留给网站；层级照旧靠明度：墨、中灰、淡。
+ * 依赖 fonts.css、tokens.css 先加载。值一律引用 token。强调色换成青
+ * （--color-teal），品牌红留给网站；层级照旧靠明度：墨、中灰、淡。
  * 标记结构见 README.md 的「桌面应用」一节。
  */
 
-/* 强调色：引用 token 的那几处改指陶土色。[data-theme] 让这条也压过
+/* 强调色：引用 token 的那几处改指青。[data-theme] 让这条也压过
  * tokens.css 的两个暗色块（同样的特异度，这个文件后加载）。 */
 :root,
 :root[data-theme] {
-	--color-accent-marker: var(--color-clay);
-	--color-accent-soft: var(--color-clay);
-	--color-link-hover: var(--color-clay);
-	--color-link-rule: var(--color-clay);
-	--color-heat: var(--color-clay);
-	--color-series-1: var(--color-clay);
+	--color-accent-marker: var(--color-teal);
+	--color-accent-soft: var(--color-teal);
+	--color-link-hover: var(--color-teal);
+	--color-link-rule: var(--color-teal);
+	--color-heat: var(--color-teal);
+	--color-series-1: var(--color-teal);
 }
 
 *,
@@ -387,8 +387,8 @@ button.small.square {
  *   </div>
  *   <div class="bottom">…</div>
  * </aside>
- * 行的状态：.on 是正在看的那行（浮起一层，时间变陶土色），.picked 是多选里
- * 勾上的（陶土淡底），.faint 是没什么内容的（标题中灰），.board 是从别的
+ * 行的状态：.on 是正在看的那行（浮起一层，时间变青），.picked 是多选里
+ * 勾上的（青色淡底），.faint 是没什么内容的（标题中灰），.board 是从别的
  * 设备来的（左上角折一个角）。行的 ⋯ 菜单放在 .slot 里，只在 hover、当前行、
  * 菜单开着时露出来。重命名时 .hit 换成 <input class="edit">。.ask 在要动手
  * 之前问一句：粗体一行说做什么，后面跟一句后果；只有一行时不写后果。 */
@@ -508,7 +508,7 @@ button.small.square {
 
 .side .row.picked,
 .side .row.picked:hover {
-	background: var(--color-clay-surface);
+	background: var(--color-teal-surface);
 }
 
 /* 折角：这一行来自另一台设备（Dayscope 里是板子录的），可能和本机的重叠。 */
@@ -536,7 +536,7 @@ button.small.square {
 }
 
 .side .row.on .time {
-	color: var(--color-clay);
+	color: var(--color-teal);
 }
 
 .side .ttl {
@@ -594,7 +594,7 @@ button.small.square {
 	height: 24px;
 	margin: 0 4px 0 8px;
 	padding: 0 6px;
-	border: 1px solid var(--color-clay);
+	border: 1px solid var(--color-teal);
 	border-radius: 5px;
 	background: var(--color-surface);
 	font-size: 13px;
