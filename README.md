@@ -3,6 +3,8 @@
 The visual system every soundadam surface draws from: colour, type, spacing
 and shape tokens (light and dark), the fonts, the marks, and the component
 stylesheets for member consoles and desktop apps. Everything served lives flat in [`web/`](web/).
+The one accent is a teal from matplotlib's viridis (`--color-teal`), shared by
+the website, the consoles and the apps; the logo keeps its own blue.
 
 | File | What it is |
 | --- | --- |
@@ -91,10 +93,10 @@ and these blocks:
 
 ```html
 <html lang="zh-CN" data-theme="auto">
-<link rel="stylesheet" href="/_design/3.0.0/fonts.css">
-<link rel="stylesheet" href="/_design/3.0.0/tokens.css">
-<link rel="stylesheet" href="/_design/3.0.0/header.css">
-<link rel="stylesheet" href="/_design/3.0.0/console.css">
+<link rel="stylesheet" href="/_design/6.0.0/fonts.css">
+<link rel="stylesheet" href="/_design/6.0.0/tokens.css">
+<link rel="stylesheet" href="/_design/6.0.0/header.css">
+<link rel="stylesheet" href="/_design/6.0.0/console.css">
 
 <header class="site-bar">…</header>
 <main class="console">
@@ -124,7 +126,7 @@ and these blocks:
 | Chart | `svg.chart` of `rect`s, then `.axis > span × 2`; `.qr` holds an SVG code |
 | Stacked chart | `svg.chart.stacked` of `rect.series-N` (N = 1–6, 6 is「其他」), `ul.legend > li.series-N > .swatch` |
 | Table | `.table-wrap > table.data`, `.num` on number cells, `.share > span` as a share bar (takes `.series-N`) |
-| Ledger | `table.data.ledger`: one value per cell, the unit in the header, `.zero` for a muted —; a `tbody` per group led by `tr.group > th[scope=rowgroup]` with its subtotal, member rows `th[scope=row]` indented under it, `tfoot > tr.total` between a rule and a double rule; `.warn`/`.bad` colour a cell that means something; a link in the row header drills down; `td.pick > input[type=checkbox]` ticks a row |
+| Ledger | `table.data.ledger`: one value per cell, the unit in the header, `.zero` for a muted —; a `tbody` per group led by `tr.group > th[scope=rowgroup]` with its subtotal, member rows `th[scope=row]` indented under it, `tfoot > tr.total` between a rule and a double rule; `.warn`/`.bad` colour a cell that means something; a link in the row header drills down and makes the whole row its link (cell links, buttons and `td.pick` stay clickable on their own; keyboard focus rings the row); `td.pick > input[type=checkbox]` ticks a row |
 | Selection bar | `form.picking` around a ledger with ticks, holding `.selection-bar > span.picked > b.count` then `label > span + input` and `.button.compact`s: shown, stuck to the bottom of the viewport, only while a row in `tbody` is ticked; the count needs no script, and a select-all box in `thead` is not counted |
 | Fields | `dl.kv > dt + dd` × n: one thing's fields, name left and value right, ruled like a ledger; `dd.secret > input.mono + .button.compact…` for a key, `dd > span.mono + .meter > span` for a used amount (`dd.warn`/`.bad` colour the bar); then `p.actions-row` of `.button.compact`s (or forms holding one) |
 | Monospace | `.mono` on a value that is an amount, id, or address outside a `<code>`; `.ledger .num` cells are already mono |
@@ -140,9 +142,10 @@ are off under `prefers-reduced-motion`.
 
 A full-window app (Tauri, Electron) such as Dayscope loads `app.css` in place
 of `header.css` and `console.css`. It styles bare `<button>`, so it never
-shares a page with `console.css`. Inside it the accent is teal, taken from matplotlib's viridis so it stays apart from the viridis spectrograms and heat maps an app draws: the open row,
-the thing in progress, the focus ring and link rules point at `--color-teal`
-instead of brand red. The window itself does not scroll; each view scrolls
+shares a page with `console.css`. The accent is the same teal as everywhere
+else, and a viridis colour on purpose, so it sits with the spectrograms and heat
+maps an app draws: the open row, the thing in progress, the focus ring and link
+rules. The window itself does not scroll; each view scrolls
 its own part, and interface text is not selectable unless it carries
 `.selectable`.
 

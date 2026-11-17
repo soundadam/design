@@ -6,22 +6,10 @@
  * 应用自己的视图。这里直接给裸的 <button> 定样式，和 console.css 的 .button
  * 放在一起会互相顶掉。
  *
- * 依赖 fonts.css、tokens.css 先加载。值一律引用 token。强调色换成青
- * （--color-teal），品牌红留给网站；层级照旧靠明度：墨、中灰、淡。
+ * 依赖 fonts.css、tokens.css 先加载。值一律引用 token。强调色是 tokens.css
+ * 的青（--color-teal），和网站、控制台同一个；层级照旧靠明度：墨、中灰、淡。
  * 标记结构见 README.md 的「桌面应用」一节。
  */
-
-/* 强调色：引用 token 的那几处改指青。[data-theme] 让这条也压过
- * tokens.css 的两个暗色块（同样的特异度，这个文件后加载）。 */
-:root,
-:root[data-theme] {
-	--color-accent-marker: var(--color-teal);
-	--color-accent-soft: var(--color-teal);
-	--color-link-hover: var(--color-teal);
-	--color-link-rule: var(--color-teal);
-	--color-heat: var(--color-teal);
-	--color-series-1: var(--color-teal);
-}
 
 *,
 *::before,
