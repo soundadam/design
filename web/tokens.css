@@ -6,31 +6,24 @@
  * 一个页面在暗色下没过视觉检查，就不该被系统设置翻成暗色。
  *
  * 视觉语言取自 Dayscope：暖调、几乎无彩的灰，墨色做主按钮和正文链接，层级
- * 靠明度（墨、中灰、淡）而不靠色相。唯一的强调色是品牌红，只用在少数几处：
- * 当前位置的标记、焦点环、链接下划线、活跃度和第一个图表系列，以及顶栏的
- * Console 按钮。logo 保持自己的蓝色渐变，两者互不跟随。
+ * 靠明度（墨、中灰、淡）而不靠色相。唯一的强调色是青，网站、控制台、应用
+ * 共用，只用在少数几处：当前位置的标记、焦点环、链接下划线、活跃度、第一个
+ * 图表系列和顶栏的 Console 按钮。logo 保持自己的蓝色渐变，两者互不跟随。
  * 改这里的值等于改所有使用方的视觉，见 .claude/rules/tokens.md。
  */
 
 :root {
 	color-scheme: light;
 
-	/* --- 品牌红：唯一的强调色，见文件头 --- */
-	--color-brand-800: #86165c;
-	--color-brand-700: #c53490; /* 顶栏 Console 按钮 hover */
-	--color-brand-600: #d62293; /* 强调色本身 */
-	--color-brand-500: #df59ad;
-	--color-brand-400: #e78ac6;
-	--color-brand-100: #f6d3e9;
-	--color-brand-050: #fdf3f9;
-
-	--gradient-brand: linear-gradient(90deg, var(--color-brand-600) 0%, var(--color-brand-500) 55%, var(--color-brand-400) 100%);
-
-	/* --- 青：桌面应用（app.css）的强调色，在那里顶替品牌红 ---
-	 * 用处和品牌红一样少：选中的那一行、正在进行的事、焦点环、链接下划线。
+	/* --- 青：唯一的强调色，见文件头 ---
 	 * 取自 matplotlib 的 viridis：应用里的频谱、热图用 viridis，强调色和图同一
-	 * 色系，挨着图里的深紫也分得开。 */
-	--color-teal: #2a788e;
+	 * 色系，挨着图里的深紫也分得开。亮色取 600，暗色取 400（偏绿一些）。
+	 * 顶栏在两种主题下都是深色，它上面的青取固定的一档，暗色块不改这几档。 */
+	--color-teal-700: #276e83; /* 亮色的链接 hover、Console 按钮 hover */
+	--color-teal-600: #2a788e; /* 亮色的强调色、Console 按钮 */
+	--color-teal-400: #35b779; /* 暗色的强调色 */
+	--color-teal-300: #5dc594; /* 深底上的青字：顶栏、暗色的链接 hover */
+	--color-teal: var(--color-teal-600);
 	--color-teal-surface: #e2eef0; /* 多选里勾上的几行 */
 	--color-on-teal: #ffffff;
 
@@ -42,14 +35,14 @@
 	--color-on-cta: var(--color-base);
 	--color-paper: #ffffff; /* 必须是浅底的内容（二维码），暗色下也不换 */
 	--color-link: var(--color-contrast); /* 链接是墨色，靠强调色的下划线认出来 */
-	--color-link-hover: var(--color-brand-600);
+	--color-link-hover: var(--color-teal-700);
 	--color-accent-surface: var(--color-gray-100); /* 次要控件 hover、提示条：淡底，不着色 */
 	--color-accent-border: var(--color-gray-400);
-	--color-accent-soft: var(--color-brand-400);
-	--color-accent-marker: var(--color-brand-600); /* 当前位置、焦点环、选中的边 */
-	/* 顶栏（深色）上的 Console 按钮：强调色留在两个站都看得见的这一处。 */
-	--color-panel-cta: var(--color-brand-600);
-	--color-panel-cta-hover: var(--color-brand-700);
+	--color-accent-soft: var(--color-teal-300); /* 浅一档的青：没指定系列的柱和占比条 */
+	--color-accent-marker: var(--color-teal); /* 当前位置、焦点环、选中的边 */
+	/* 顶栏（深色）上的 Console 按钮，两种主题下是同一个青。 */
+	--color-panel-cta: var(--color-teal-600);
+	--color-panel-cta-hover: var(--color-teal-700);
 	--color-on-panel-cta: #ffffff;
 
 	/* --- 中性灰阶：暖调、色度很低，里面没有蓝 --- */
@@ -69,7 +62,7 @@
 	--color-muted: var(--color-gray-500); /* 次要文字 */
 	--color-sidebar: var(--color-gray-100); /* 控制台侧栏：比页面底深一档，贴着窗口左边 */
 	--color-sidebar-hover: #e6e4dd;
-	--color-heat: var(--color-brand-600); /* 活跃度格子；深浅用不透明度分档 */
+	--color-heat: var(--color-teal); /* 活跃度格子；深浅用不透明度分档 */
 
 	/* --- 状态色：文字色与它的浅底成对使用 --- */
 	--color-ok: #13743a;
@@ -80,7 +73,7 @@
 	--color-bad-surface: #fee4e2;
 
 	/* --- 图表系列色：堆叠柱与图例，按顺序取用，最后一个留给「其他」 --- */
-	--color-series-1: var(--color-brand-600);
+	--color-series-1: var(--color-teal);
 	--color-series-2: #2f6fde;
 	--color-series-3: #0f9d8a;
 	--color-series-4: #e38a12;
@@ -173,7 +166,6 @@
 
 	/* --- 动效。reduced-motion 下由使用方统一关掉 --- */
 	--transition-fast: 0.15s ease;
-	--transition-slow: 0.3s ease;
 	--transition-slide: 0.28s cubic-bezier(0.3, 0.7, 0.4, 1); /* 滑块换位，收尾略缓 */
 	--motion-rise: 0.32s cubic-bezier(0.2, 0.7, 0.3, 1); /* 内容进场：淡入并上移一点 */
 	--motion-stagger: 45ms; /* 同一页里相邻两块进场的间隔 */
@@ -197,8 +189,8 @@
 	--color-panel-rule: #44433f; /* 面板里的分隔线 */
 	--color-panel-text: #faf9f5;
 	--color-panel-muted: #b5b3aa;
-	--color-panel-accent: #f1a4d4;
-	--color-link-rule: var(--color-brand-600); /* 链接的下划线 */
+	--color-panel-accent: var(--color-teal-300);
+	--color-link-rule: var(--color-teal); /* 链接的下划线 */
 	--color-surface-project: #f3f1ec;
 
 	/* --- 布局 --- */
@@ -225,7 +217,8 @@
 
 /* 暗色。只覆盖颜色与阴影；名字必须是上面已经声明的 token。
  * 和亮色同一套暖灰：页面底最深，浮起的一层（当前页、输入框）亮一档，淡底
- * （侧栏、数据块）再亮一档。墨色按钮翻成浅色，按钮上的字跟着页面底变深。 */
+ * （侧栏、数据块）再亮一档。墨色按钮翻成浅色，按钮上的字跟着页面底变深。
+ * 指向 --color-teal 的语义色（焦点环、下划线、活跃度……）跟着它换，不再重写。 */
 @media (prefers-color-scheme: dark) {
 	:root[data-theme="auto"] {
 		color-scheme: dark;
@@ -233,8 +226,7 @@
 		--color-base: #1f1e1d;
 		--color-contrast: #ecebe6;
 		--color-cta-hover: #c9c7bf;
-		--color-link-hover: var(--color-brand-400);
-		--color-accent-marker: var(--color-brand-500);
+		--color-link-hover: var(--color-teal-300);
 
 		--color-gray-050: #232221;
 		--color-gray-100: #2c2b29;
@@ -244,13 +236,12 @@
 		--color-gray-600: #77756e;
 		--color-gray-700: #c4c2b9;
 
-		--color-teal: #35b779;
+		--color-teal: var(--color-teal-400);
 		--color-teal-surface: #1f312b;
 		--color-on-teal: #1f1e1d;
 
-	--color-surface: #262624;
+		--color-surface: #262624;
 		--color-sidebar-hover: #363532;
-		--color-heat: var(--color-brand-500);
 
 		--color-ok: #4ade80;
 		--color-ok-surface: #12301d;
@@ -259,7 +250,6 @@
 		--color-bad: #f87171;
 		--color-bad-surface: #3a1616;
 
-		--color-series-1: var(--color-brand-500);
 		--color-series-2: #6a9cf0;
 		--color-series-3: #3cc7b0;
 		--color-series-4: #f2a73b;
@@ -269,7 +259,6 @@
 		--color-code-number: #f4a64a;
 		--color-code-error: #ff8a80;
 
-		--color-link-rule: var(--color-brand-500);
 		--color-surface-project: #262624;
 
 		--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -290,8 +279,7 @@
 	--color-base: #1f1e1d;
 	--color-contrast: #ecebe6;
 	--color-cta-hover: #c9c7bf;
-	--color-link-hover: var(--color-brand-400);
-	--color-accent-marker: var(--color-brand-500);
+	--color-link-hover: var(--color-teal-300);
 
 	--color-gray-050: #232221;
 	--color-gray-100: #2c2b29;
@@ -301,13 +289,12 @@
 	--color-gray-600: #77756e;
 	--color-gray-700: #c4c2b9;
 
-	--color-teal: #35b779;
+	--color-teal: var(--color-teal-400);
 	--color-teal-surface: #1f312b;
 	--color-on-teal: #1f1e1d;
 
 	--color-surface: #262624;
 	--color-sidebar-hover: #363532;
-	--color-heat: var(--color-brand-500);
 
 	--color-ok: #4ade80;
 	--color-ok-surface: #12301d;
@@ -316,7 +303,6 @@
 	--color-bad: #f87171;
 	--color-bad-surface: #3a1616;
 
-	--color-series-1: var(--color-brand-500);
 	--color-series-2: #6a9cf0;
 	--color-series-3: #3cc7b0;
 	--color-series-4: #f2a73b;
@@ -326,7 +312,6 @@
 	--color-code-number: #f4a64a;
 	--color-code-error: #ff8a80;
 
-	--color-link-rule: var(--color-brand-500);
 	--color-surface-project: #262624;
 
 	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);

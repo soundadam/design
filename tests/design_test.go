@@ -4,6 +4,7 @@
 package tests
 
 import (
+	"maps"
 	"math"
 	"os"
 	"path/filepath"
@@ -199,6 +200,12 @@ func TestTextContrast(t *testing.T) {
 		{"color-bad", "color-surface-muted"},
 		// A ledger row under the pointer; its header link turns link-coloured.
 		{"color-link", "color-surface-muted"},
+		// A hovered link: on the page, in a raised layer, in a notice or a
+		// hovered ledger row.
+		{"color-link-hover", "color-canvas"},
+		{"color-link-hover", "color-surface"},
+		{"color-link-hover", "color-surface-muted"},
+		{"color-link-hover", "color-accent-surface"},
 		{"color-bad", "color-surface"},
 		// Sections sit on the page background, so their text does too.
 		{"color-link", "color-canvas"},
@@ -217,22 +224,77 @@ func TestTextContrast(t *testing.T) {
 		{"color-panel-text", "color-panel-raised"},
 		{"color-panel-muted", "color-panel-raised"},
 		{"color-panel-accent", "color-panel-raised"},
+		// The Console button, at rest and under the pointer.
+		{"color-on-panel-cta", "color-panel-cta"},
+		{"color-on-panel-cta", "color-panel-cta-hover"},
 	}
+	checkPairs(t, pairs, 4.5)
+}
+
+// Marks that carry meaning without text, held to WCAG 1.4.11 (3:1) in both
+// themes: the focus ring and current-place marker on every surface it sits
+// on, link underlines, and the top bar's accents.
+func TestMarkContrast(t *testing.T) {
+	pairs := [][2]string{
+		{"color-accent-marker", "color-canvas"},
+		{"color-accent-marker", "color-surface"},
+		{"color-accent-marker", "color-surface-muted"},
+		{"color-accent-marker", "color-sidebar"},
+		{"color-accent-marker", "color-sidebar-hover"},
+		{"color-accent-marker", "color-segment-track"},
+		{"color-link-rule", "color-canvas"},
+		{"color-link-rule", "color-surface"},
+		{"color-teal", "color-surface"},
+		// The current section's underline and the Console button on the bar,
+		// and the bar's focus ring.
+		{"color-panel-cta", "color-panel"},
+		{"color-panel-cta-hover", "color-panel"},
+		{"color-panel-accent", "color-panel"},
+		{"color-panel-accent", "color-panel-raised"},
+	}
+	checkPairs(t, pairs, 3)
+}
+
+// Teal is the one accent: the tokens that mark a place, rule a link, or
+// colour the first series follow --color-teal in both themes, so a dark
+// value is written once.
+func TestOneAccent(t *testing.T) {
+	followers := []string{"color-accent-marker", "color-link-rule", "color-heat", "color-series-1"}
 	light, dark := themes(t)
-	merged := map[string]string{}
-	for k, v := range light {
-		merged[k] = v
+	for _, theme := range []map[string]string{light, overlay(light, dark)} {
+		r, g, b := resolve(t, theme, "color-teal")
+		for _, name := range followers {
+			if r2, g2, b2 := resolve(t, theme, name); r2 != r || g2 != g || b2 != b {
+				t.Errorf("--%s does not resolve to --color-teal", name)
+			}
+		}
 	}
-	for k, v := range dark {
-		merged[k] = v
+	for _, name := range followers {
+		if _, ok := dark[name]; ok {
+			t.Errorf("the dark block sets --%s; it follows --color-teal", name)
+		}
 	}
+}
+
+// overlay is what a dark page resolves: the light declarations with the
+// dark overrides on top.
+func overlay(light, dark map[string]string) map[string]string {
+	out := maps.Clone(light)
+	maps.Copy(out, dark)
+	return out
+}
+
+func checkPairs(t *testing.T, pairs [][2]string, least float64) {
+	t.Helper()
+	light, dark := themes(t)
+	merged := overlay(light, dark)
 	for _, theme := range []struct {
 		name   string
 		values map[string]string
 	}{{"light", light}, {"dark", merged}} {
 		for _, p := range pairs {
-			if c := contrast(t, theme.values, p[0], p[1]); c < 4.5 {
-				t.Errorf("%s: --%s on --%s is %.2f:1, below 4.5:1", theme.name, p[0], p[1], c)
+			if c := contrast(t, theme.values, p[0], p[1]); c < least {
+				t.Errorf("%s: --%s on --%s is %.2f:1, below %.1f:1", theme.name, p[0], p[1], c, least)
 			}
 		}
 	}
